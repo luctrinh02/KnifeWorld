@@ -24,11 +24,10 @@ public class User implements Serializable{
 	@Column(name = "email",unique = true)
 	private String email;
 	private String password;
-	@Column(name="phone_number")
-	private String phoneNumber;
 	@Column(name = "address")
 	private String address;
 	private String fullname;
+	private Integer role;
 	private Integer status;
 	@Column(name = "create_date")
 	private Date createdDate;
@@ -61,12 +60,6 @@ public class User implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
 	}
 	public String getAddress() {
 		return address;
@@ -128,9 +121,22 @@ public class User implements Serializable{
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+	
+	public Integer getRole() {
+		return role;
+	}
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+	public List<Bill> getBills() {
+		return bills;
+	}
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
+	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", password=" + password + ", phoneNumber=" + phoneNumber
+		return "User [id=" + id + ", email=" + email + ", password=" + password 
 				+ ", address=" + address + ", fullname=" + fullname + ", status=" + status + ", createdDate="
 				+ createdDate + "]";
 	}

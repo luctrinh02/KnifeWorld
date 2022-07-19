@@ -65,6 +65,8 @@ public class Product implements Serializable{
 	@Column(name = "blade_wide")
 	private Double bladeWide;
 	
+	private String image;
+	
 	@ManyToOne
 	@JoinColumn(name = "manufacturer_id",insertable = false,updatable = false)
 	private Manufacturer manufacturer;
@@ -229,6 +231,15 @@ public class Product implements Serializable{
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Override
