@@ -5,21 +5,22 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
 @Embeddable
-public class CommentPK implements Serializable{
+public class BillDetailPK implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "user_id",insertable = false,updatable = false)
-	private Integer userId;
+	@Column(name = "bill_id",insertable = false,updatable = false)
+	private Integer billId;
 	@Column(name = "product_id",insertable = false,updatable = false)
 	private Integer productId;
-	public Integer getUserId() {
-		return userId;
+	public Integer getBillId() {
+		return billId;
 	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setBillId(Integer billId) {
+		this.billId = billId;
 	}
 	public Integer getProductId() {
 		return productId;
@@ -29,7 +30,7 @@ public class CommentPK implements Serializable{
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(productId, userId);
+		return Objects.hash(billId, productId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -39,12 +40,13 @@ public class CommentPK implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CommentPK other = (CommentPK) obj;
-		return Objects.equals(productId, other.productId) && Objects.equals(userId, other.userId);
+		BillDetailPK other = (BillDetailPK) obj;
+		return Objects.equals(billId, other.billId) && Objects.equals(productId, other.productId);
 	}
 	@Override
 	public String toString() {
-		return "CommentPK [userId=" + userId + ", productId=" + productId + "]";
+		return "BillDetailPK [billId=" + billId + ", productId=" + productId + "]";
 	}
+	
 	
 }

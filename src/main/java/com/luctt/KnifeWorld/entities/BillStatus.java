@@ -8,7 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-public class Origin implements Serializable{
+public class BillStatus implements Serializable{
+
 	/**
 	 * 
 	 */
@@ -17,9 +18,8 @@ public class Origin implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	private String status;
-	@OneToMany(mappedBy = "origin")
-	private List<Product> products;
+	@OneToMany(mappedBy = "status")
+	private List<Bill> bills;
 	public Integer getId() {
 		return id;
 	}
@@ -32,15 +32,15 @@ public class Origin implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getStatus() {
-		return status;
+	public List<Bill> getBills() {
+		return bills;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
 	}
 	@Override
 	public String toString() {
-		return "Origin [id=" + id + ", name=" + name + ", status=" + status + "]";
+		return "BillStatus [id=" + id + ", name=" + name + "]";
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.luctt.KnifeWorld.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -29,12 +30,14 @@ public class User implements Serializable{
 	private String address;
 	private String fullname;
 	private Integer status;
+	@Column(name = "create_date")
+	private Date createdDate;
 	@OneToMany(mappedBy = "user")
 	private List<Product> products;
 	@OneToMany(mappedBy = "user")
 	private List<Cart> carts;
 	@OneToMany(mappedBy = "user")
-	private List<Order> orders;
+	private List<Bill> bills;
 	@OneToMany(mappedBy = "user")
 	private List<Notication> notications;
 	@OneToMany(mappedBy = "user")
@@ -95,11 +98,11 @@ public class User implements Serializable{
 	public void setCarts(List<Cart> carts) {
 		this.carts = carts;
 	}
-	public List<Order> getOrders() {
-		return orders;
+	public List<Bill> getOrders() {
+		return bills;
 	}
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
+	public void setOrders(List<Bill> bills) {
+		this.bills = bills;
 	}
 	public List<Notication> getNotications() {
 		return notications;
@@ -119,11 +122,20 @@ public class User implements Serializable{
 	public void setOrigins(List<Origin> origins) {
 		this.origins = origins;
 	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", password=" + password + ", phoneNumber=" + phoneNumber
-				+ ", address=" + address + ", fullname=" + fullname + ", status=" + status + "]";
+				+ ", address=" + address + ", fullname=" + fullname + ", status=" + status + ", createdDate="
+				+ createdDate + "]";
 	}
+	
+	
 	
 	
 }

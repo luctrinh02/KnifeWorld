@@ -81,7 +81,7 @@ public class Product implements Serializable{
 	private List<Cart> carts;
 	
 	@OneToMany(mappedBy = "product")
-	private List<OrderDetail> orderDetails;
+	private List<BillDetail> billDetails;
 	
 	@OneToMany(mappedBy = "product")
 	private List<Comment> comments;
@@ -214,12 +214,13 @@ public class Product implements Serializable{
 		this.carts = carts;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
-		return orderDetails;
+
+	public List<BillDetail> getBillDetails() {
+		return billDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
+	public void setBillDetails(List<BillDetail> billDetails) {
+		this.billDetails = billDetails;
 	}
 
 	public List<Comment> getComments() {
