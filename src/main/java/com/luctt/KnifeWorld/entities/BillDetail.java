@@ -3,9 +3,12 @@ package com.luctt.KnifeWorld.entities;
 import java.math.BigDecimal;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
+import javax.persistence.Table;
+@Entity
+@Table
 public class BillDetail {
 	@EmbeddedId
 	private BillDetailPK billDetailPK;

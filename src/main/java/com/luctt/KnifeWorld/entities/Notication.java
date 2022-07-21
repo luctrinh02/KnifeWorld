@@ -20,7 +20,7 @@ public class Notication implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer noticationPK;
+	private Integer id;
 	private String message;
 	private String status;
 	@ManyToOne
@@ -28,11 +28,12 @@ public class Notication implements Serializable{
 	private User user;
 	@Column(name = "bill_id")
 	private Integer billId;
-	public Integer getNoticationPK() {
-		return noticationPK;
+	
+	public Integer getId() {
+		return id;
 	}
-	public void setNoticationPK(Integer noticationPK) {
-		this.noticationPK = noticationPK;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public String getMessage() {
 		return message;
@@ -60,7 +61,7 @@ public class Notication implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Notication [noticationPK=" + noticationPK + ", message=" + message + ", status=" + status + ", user="
+		return "Notication [Id=" + id + ", message=" + message + ", status=" + status + ", user="
 				+ user + ", billId=" + billId + "]";
 	}
 	

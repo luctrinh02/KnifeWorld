@@ -22,10 +22,10 @@ public class Comment implements Serializable{
 	private String content;
 	private Integer rate;
 	@ManyToOne
-	@JoinColumn(name = "user_id",insertable = false,updatable = true)
+	@JoinColumn(name = "user_id",insertable = false,updatable = false)
 	private User user;
 	@ManyToOne
-	@JoinColumn(name = "product_id",insertable = false,updatable = true)
+	@JoinColumn(name = "product_id",insertable = false,updatable = false)
 	private Product product;
 	public CommentPK getCommentPK() {
 		return commentPK;

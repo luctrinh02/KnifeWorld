@@ -15,15 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Store;
-import org.springframework.stereotype.Indexed;
 
 
 @Entity
-@Indexed
 @Table
 public class Product implements Serializable{
 	/**
@@ -35,18 +29,14 @@ public class Product implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Field(index = Index.YES,analyze = Analyze.YES,store = Store.NO)
 	private String name;
-	@Field(index = Index.YES,analyze = Analyze.YES,store = Store.NO)
 	private String material;
 	
-	@Field(index = Index.YES,analyze = Analyze.YES,store = Store.NO)
 	@Column(name = "blade_length")
-	private Double bladeLength;
+	private String bladeLength;
 	
-	@Field(index = Index.YES,analyze = Analyze.YES,store = Store.NO)
 	@Column(name="hilt_length")
-	private Double hilt_length;
+	private String hilt_length;
 	
 	private BigDecimal price;
 	
@@ -60,10 +50,10 @@ public class Product implements Serializable{
 	
 	private Integer status;
 	
-	private Double weight;
+	private String weight;
 	
 	@Column(name = "blade_wide")
-	private Double bladeWide;
+	private String bladeWide;
 	
 	private String image;
 	
@@ -112,21 +102,6 @@ public class Product implements Serializable{
 		this.material = material;
 	}
 
-	public Double getBladeLength() {
-		return bladeLength;
-	}
-
-	public void setBladeLength(Double bladeLength) {
-		this.bladeLength = bladeLength;
-	}
-
-	public Double getHilt_length() {
-		return hilt_length;
-	}
-
-	public void setHilt_length(Double hilt_length) {
-		this.hilt_length = hilt_length;
-	}
 
 	public BigDecimal getPrice() {
 		return price;
@@ -168,21 +143,6 @@ public class Product implements Serializable{
 		this.status = status;
 	}
 
-	public Double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
-
-	public Double getBladeWide() {
-		return bladeWide;
-	}
-
-	public void setBladeWide(Double bladeWide) {
-		this.bladeWide = bladeWide;
-	}
 
 	public Origin getOrigin() {
 		return origin;
@@ -240,6 +200,39 @@ public class Product implements Serializable{
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+
+	public String getBladeLength() {
+		return bladeLength;
+	}
+
+	public void setBladeLength(String bladeLength) {
+		this.bladeLength = bladeLength;
+	}
+
+	public String getHilt_length() {
+		return hilt_length;
+	}
+
+	public void setHilt_length(String hilt_length) {
+		this.hilt_length = hilt_length;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getBladeWide() {
+		return bladeWide;
+	}
+
+	public void setBladeWide(String bladeWide) {
+		this.bladeWide = bladeWide;
 	}
 
 	@Override

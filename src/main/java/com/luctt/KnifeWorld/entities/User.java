@@ -11,9 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.luctt.KnifeWorld.adapter.EntityAdapter;
+import com.luctt.KnifeWorld.dto.response.UserResponseDto;
 @Entity
 @Table
-public class User implements Serializable{
+public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
 	/**
 	 * 
 	 */
@@ -41,8 +44,6 @@ public class User implements Serializable{
 	private List<Notication> notications;
 	@OneToMany(mappedBy = "user")
 	private List<Comment> comments;
-	@OneToMany(mappedBy = "user")
-	private List<Origin> origins;
 	public Integer getId() {
 		return id;
 	}
@@ -109,12 +110,6 @@ public class User implements Serializable{
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	public List<Origin> getOrigins() {
-		return origins;
-	}
-	public void setOrigins(List<Origin> origins) {
-		this.origins = origins;
-	}
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -139,6 +134,18 @@ public class User implements Serializable{
 		return "User [id=" + id + ", email=" + email + ", password=" + password 
 				+ ", address=" + address + ", fullname=" + fullname + ", status=" + status + ", createdDate="
 				+ createdDate + "]";
+	}
+	@Override
+	public UserResponseDto entityToDto(User u) {
+		UserResponseDto dto=new UserResponseDto();
+		dto.setAddress(u.getAddress());
+		dto.setEmail(u.getEmail());
+		dto.setFullname(u.getFullname());
+		dto.setId(u.getId());
+		dto.setPassword(u.getPassword());
+		dto.setRole(u.getRole());
+		dto.setStatus(u.getStatus());
+		return dto;
 	}
 	
 	

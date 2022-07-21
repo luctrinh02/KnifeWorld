@@ -6,8 +6,8 @@ public class UserResponseDto {
 	private String email;
 	private String password;
 	private String fullname;
-	private String role;
-	private String status;
+	private Integer role;
+	private Integer status;
 	private String address;
 	public String getEmail() {
 		return email;
@@ -27,17 +27,18 @@ public class UserResponseDto {
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
-	public String getRole() {
+	
+	public Integer getRole() {
 		return role;
 	}
 	public void setRole(Integer role) {
-		this.role = role==0?"Admin":"User";
+		this.role = role;
 	}
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 	public void setStatus(Integer status) {
-		this.status = status==0?"Hiệu lực":"Vô hiệu";
+		this.status = status;
 	}
 	public Integer getId() {
 		return id;

@@ -35,9 +35,9 @@ public class Bill implements Serializable{
 	private User user;
 	@ManyToOne
 	@JoinColumn(name = "status_id",insertable = false,updatable = false)
+	private BillStatus status;
 	@OneToMany(mappedBy = "bill")
 	private List<BillDetail> billDetails;
-	private BillStatus status;
 	public Integer getId() {
 		return id;
 	}

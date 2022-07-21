@@ -4,7 +4,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserRequestDto {
+import com.luctt.KnifeWorld.adapter.DtoAdapter;
+import com.luctt.KnifeWorld.entities.User;
+
+public class UserRequestDto implements DtoAdapter<UserRequestDto, User>{
 	@NotBlank(message = "Không bỏ trống email")
 	@Email(message = "Không đúng định dạng email")
 	private String email;
@@ -50,6 +53,17 @@ public class UserRequestDto {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	@Override
+	public User dtoToEntity(UserRequestDto d) {
+		User u=new User();
+		u.setAddress(d.getAddress());
+		u.setEmail(d.getEmail());
+		u.setFullname(d.getFullname());
+		u.setPassword(d.getPassword());
+		u.setRole(d.getRole());
+		u.setStatus(d.getStatus());
+		return u;
 	}
 	
 	
