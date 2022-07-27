@@ -55,14 +55,14 @@ public class UserRequestDto implements DtoAdapter<UserRequestDto, User>{
 		this.address = address;
 	}
 	@Override
-	public User dtoToEntity(UserRequestDto d) {
+	public User dtoToEntity() {
 		User u=new User();
-		u.setAddress(d.getAddress());
-		u.setEmail(d.getEmail());
-		u.setFullname(d.getFullname());
-		u.setPassword(d.getPassword());
-		u.setRole(d.getRole());
-		u.setStatus(d.getStatus());
+		u.setAddress(this.getAddress());
+		u.setEmail(this.getEmail());
+		u.setFullname(this.getFullname());
+		u.setPassword(this.getPassword());
+		u.setRole(this.getRole());
+		u.setStatus(this.getStatus());
 		return u;
 	}
 	

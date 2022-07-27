@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+	integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+	<button onclick="get();">Get</button>
+	<script type="text/javascript">
+		function get(){
+			$.ajax({
+				  url: "http://localhost:8080/api/admin/users",
+				  type:"get",
+				  success: function(response){
+				    console.log(response.data.content);
+				    console.log(response.statusCode);
+				  }
+				});
+		}
+	</script>
+</body>
+</html>

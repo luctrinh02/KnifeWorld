@@ -11,7 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luctt.KnifeWorld.adapter.EntityAdapter;
 import com.luctt.KnifeWorld.dto.response.UserResponseDto;
 @Entity
@@ -32,16 +35,22 @@ public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
 	private String fullname;
 	private Integer role;
 	private Integer status;
+	@Temporal(TemporalType.DATE)
 	@Column(name = "create_date")
 	private Date createdDate;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Product> products;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Cart> carts;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Bill> bills;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Notication> notications;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Comment> comments;
 	public Integer getId() {
@@ -92,12 +101,6 @@ public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
 	public void setCarts(List<Cart> carts) {
 		this.carts = carts;
 	}
-	public List<Bill> getOrders() {
-		return bills;
-	}
-	public void setOrders(List<Bill> bills) {
-		this.bills = bills;
-	}
 	public List<Notication> getNotications() {
 		return notications;
 	}
@@ -136,15 +139,15 @@ public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
 				+ createdDate + "]";
 	}
 	@Override
-	public UserResponseDto entityToDto(User u) {
+	public UserResponseDto entityToDto() {
 		UserResponseDto dto=new UserResponseDto();
-		dto.setAddress(u.getAddress());
-		dto.setEmail(u.getEmail());
-		dto.setFullname(u.getFullname());
-		dto.setId(u.getId());
-		dto.setPassword(u.getPassword());
-		dto.setRole(u.getRole());
-		dto.setStatus(u.getStatus());
+		dto.setAddress(this.getAddress());
+		dto.setEmail(this.getEmail());
+		dto.setFullname(this.getFullname());
+		dto.setId(this.getId());
+		dto.setPassword(this.getPassword());
+		dto.setRole(this.getRole());
+		dto.setStatus(this.getStatus());
 		return dto;
 	}
 	

@@ -1,5 +1,7 @@
 package com.luctt.KnifeWorld.dto.request;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -116,8 +118,10 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 		this.userId = userId;
 	}
 	@Override
-	public Product dtoToEntity(ProductRequestDto d) {
+	public Product dtoToEntity() {
+		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	
 }
