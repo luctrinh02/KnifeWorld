@@ -8,6 +8,7 @@ import com.luctt.KnifeWorld.adapter.DtoAdapter;
 import com.luctt.KnifeWorld.entities.User;
 
 public class UserRequestDto implements DtoAdapter<UserRequestDto, User>{
+	private Integer id;
 	@NotBlank(message = "Không bỏ trống email")
 	@Email(message = "Không đúng định dạng email")
 	private String email;
@@ -54,9 +55,17 @@ public class UserRequestDto implements DtoAdapter<UserRequestDto, User>{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	@Override
 	public User dtoToEntity() {
 		User u=new User();
+		u.setId(this.getId());
 		u.setAddress(this.getAddress());
 		u.setEmail(this.getEmail());
 		u.setFullname(this.getFullname());

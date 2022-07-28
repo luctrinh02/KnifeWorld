@@ -14,6 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -41,10 +45,10 @@ public class Product implements Serializable{
 	private BigDecimal price;
 	
 	private Integer amount;
-	
+	@Temporal(TemporalType.DATE)
 	@Column(name ="created_date")
 	private Date createdDate;
-	
+	@Temporal(TemporalType.DATE)
 	@Column(name="last_changed_date")
 	private Date lastChangedDate;
 	
@@ -56,7 +60,7 @@ public class Product implements Serializable{
 	private String bladeWide;
 	
 	private String image;
-	
+	private String description;
 	@ManyToOne
 	@JoinColumn(name = "manufacturer_id",insertable = false,updatable = false)
 	private Manufacturer manufacturer;
@@ -68,13 +72,13 @@ public class Product implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "created_by",insertable = false,updatable = false)
 	private User user;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Cart> carts;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<BillDetail> billDetails;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Comment> comments;
 	
@@ -233,6 +237,14 @@ public class Product implements Serializable{
 
 	public void setBladeWide(String bladeWide) {
 		this.bladeWide = bladeWide;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.luctt.KnifeWorld.dto.request.UserRequestDto;
 import com.luctt.KnifeWorld.entities.User;
 import com.luctt.KnifeWorld.service.UserService;
-import com.luctt.KnifeWorld.utilities.getMap;
+import com.luctt.KnifeWorld.utilities.GetMap;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/users")
 public class AdminUserApi {
 	private UserService service;
 
@@ -35,71 +35,72 @@ public class AdminUserApi {
 		this.service = service;
 	}
 	
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getUsers(@RequestParam(name = "page",defaultValue = "0",required = false) Integer pageNumber
 			,@PathVariable(name = "id",required = false) Integer id
 			) {
 		if(id==null) {
 			Page<User> page=service.getByPage(pageNumber);
-			HashMap<String, Object> map=getMap.getData("ok", page);
+			HashMap<String, Object> map=GetMap.getData("ok", page);
 			return ResponseEntity.status(HttpStatus.OK).body(map);
 		}else {
 			User u=service.getById(id);
-			HashMap<String, Object> map=getMap.getData("ok", u);
+			HashMap<String, Object> map=GetMap.getData("ok", u);
 			return ResponseEntity.status(HttpStatus.OK).body(map);
 		}
 	}
-	@PostMapping("/users")
+	@PostMapping("")
 	public ResponseEntity<?> addUser(@Valid UserRequestDto dto,BindingResult result) {
 		if(result.hasErrors()) {
 			List<ObjectError> list=result.getAllErrors();
-			HashMap<String, Object> map=getMap.getData("ok", list);
+			HashMap<String, Object> map=GetMap.getData("ok", list);
 			return ResponseEntity.status(200).body(map);
 		}else {
 			User u=dto.dtoToEntity();
 			try {
 				u=service.save(u);
 				Page<User> page=service.getByPage(0);
-				HashMap<String, Object> map=getMap.getData("ok", page);
+				HashMap<String, Object> map=GetMap.getData("ok", page);
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {
-				HashMap<String, Object> map=getMap.getData("error", "Email bị trùng lặp");
+				HashMap<String, Object> map=GetMap.getData("error", "Email bị trùng lặp");
 				return ResponseEntity.status(200).body(map);
 			}
 		}
 	}
-	@PatchMapping("/users/{id}")
+	@PatchMapping("{id}")
 	public ResponseEntity<?> changeStatus(@PathVariable(name = "id") Integer id,@RequestParam(name = "status",required = true) Integer status
 			,@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumer,HttpServletRequest request
 			){
 		try {
 			service.changeStatus(id,status,request);
 			Page<User> page=service.getByPage(pageNumer);
-			HashMap<String, Object> map=getMap.getData("ok", page);
+			HashMap<String, Object> map=GetMap.getData("ok", page);
 			return ResponseEntity.ok(map);
 		} catch (NullPointerException e) {
-			HashMap<String, Object> map=getMap.getData("ok", "Không tồn tại người dùng này");
+			HashMap<String, Object> map=GetMap.getData("ok", "Không tồn tại người dùng này");
 			return ResponseEntity.ok(map);
 		} catch (IllegalArgumentException e) {
-			HashMap<String, Object> map=getMap.getData("ok", "Không thể tự vô hiệu chính mình");
+			HashMap<String, Object> map=GetMap.getData("ok", "Không thể tự vô hiệu chính mình");
 			return ResponseEntity.ok(map);
 		}
 	}
-	@PutMapping("/users")
-	public ResponseEntity<?> update(@Valid UserRequestDto dto,BindingResult result) {
+	@PutMapping("")
+	public ResponseEntity<?> update(@Valid UserRequestDto dto,BindingResult result,@RequestParam(name = "id") Integer id) {
 		if(result.hasErrors()) {
 			List<ObjectError> list=result.getAllErrors();
-			HashMap<String, Object> map=getMap.getData("ok", list);
+			HashMap<String, Object> map=GetMap.getData("ok", list);
 			return ResponseEntity.status(200).body(map);
 		}else {
 			User u=dto.dtoToEntity();
 			try {
+				u.setId(id);
 				u=service.save(u);
 				Page<User> page=service.getByPage(0);
-				HashMap<String, Object> map=getMap.getData("ok", page);
+				HashMap<String, Object> map=GetMap.getData("ok", page);
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {
-				HashMap<String, Object> map=getMap.getData("error", "Email bị trùng lặp");
+				HashMap<String, Object> map=GetMap.getData("error", "Email bị trùng lặp");
 				return ResponseEntity.status(200).body(map);
 			}
 		}

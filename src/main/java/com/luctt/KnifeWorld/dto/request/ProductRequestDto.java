@@ -11,6 +11,7 @@ import com.luctt.KnifeWorld.adapter.DtoAdapter;
 import com.luctt.KnifeWorld.entities.Product;
 
 public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>{
+	private Integer id;
 	@NotBlank(message = "Không bỏ trống tên")
 	private String name;
 	@NotBlank(message = "Không bỏ trống chất liệu")
@@ -116,6 +117,13 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 	}
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	@Override
 	public Product dtoToEntity() {

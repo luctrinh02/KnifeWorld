@@ -15,11 +15,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.luctt.KnifeWorld.adapter.EntityAdapter;
-import com.luctt.KnifeWorld.dto.response.UserResponseDto;
 @Entity
 @Table
-public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
+public class User implements Serializable{
 	/**
 	 * 
 	 */
@@ -138,20 +136,4 @@ public class User implements Serializable,EntityAdapter<User, UserResponseDto>{
 				+ ", address=" + address + ", fullname=" + fullname + ", status=" + status + ", createdDate="
 				+ createdDate + "]";
 	}
-	@Override
-	public UserResponseDto entityToDto() {
-		UserResponseDto dto=new UserResponseDto();
-		dto.setAddress(this.getAddress());
-		dto.setEmail(this.getEmail());
-		dto.setFullname(this.getFullname());
-		dto.setId(this.getId());
-		dto.setPassword(this.getPassword());
-		dto.setRole(this.getRole());
-		dto.setStatus(this.getStatus());
-		return dto;
-	}
-	
-	
-	
-	
 }

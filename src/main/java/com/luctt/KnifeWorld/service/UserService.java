@@ -33,7 +33,7 @@ public class UserService {
 		return repository.findByEmail(email);
 	}
 	public Page<User> getByPage(Integer page){
-		return repository.findAll(PageRequest.of(page, AppConstraint.numOfRecord,Sort.by("id")));
+		return repository.findAll(PageRequest.of(page, AppConstraint.numOfRecord,Sort.by("id").descending()));
 	}
 	public User save(User u) {
 		return repository.save(u);
