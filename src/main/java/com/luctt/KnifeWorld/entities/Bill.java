@@ -14,6 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -28,14 +32,14 @@ public class Bill implements Serializable{
 	private Integer id;
 	@Column(name = "total_money")
 	private BigDecimal totalMoney;
+	@Temporal(TemporalType.DATE)
 	@Column(name = "created_date")
 	private Date createdDate;
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false,updatable = false)
 	private User user;
-	@ManyToOne
-	@JoinColumn(name = "status_id",insertable = false,updatable = false)
-	private BillStatus status;
+	private Integer status;
+	@JsonIgnore
 	@OneToMany(mappedBy = "bill")
 	private List<BillDetail> billDetails;
 	public Integer getId() {
@@ -62,18 +66,18 @@ public class Bill implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public BillStatus getStatus() {
-		return status;
-	}
-	public void setStatus(BillStatus status) {
-		this.status = status;
-	}
-	
 	public List<BillDetail> getBillDetails() {
 		return billDetails;
 	}
 	public void setBillDetails(List<BillDetail> billDetails) {
 		this.billDetails = billDetails;
+	}
+	
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	@Override
 	public String toString() {

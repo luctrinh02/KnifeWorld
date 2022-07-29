@@ -1,6 +1,5 @@
 package com.luctt.KnifeWorld.dto.request;
 
-import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -37,8 +36,10 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 	private String bladeWide;
 	@NotBlank(message = "Không bỏ trống hình ảnh")
 	private String image;
-	private Integer manufacturerId;
-	private Integer originId;
+	@NotBlank(message = "Không bỏ trống hãng chế tác")
+	private Integer manufacturer;
+	@NotBlank(message = "Không bỏ trống nguồn gốc")
+	private String origin;
 	private Integer userId;
 	public String getName() {
 		return name;
@@ -100,18 +101,6 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public Integer getManufacturerId() {
-		return manufacturerId;
-	}
-	public void setManufacturerId(Integer manufacturerId) {
-		this.manufacturerId = manufacturerId;
-	}
-	public Integer getOriginId() {
-		return originId;
-	}
-	public void setOriginId(Integer originId) {
-		this.originId = originId;
-	}
 	public Integer getUserId() {
 		return userId;
 	}
@@ -124,6 +113,19 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Integer getManufacturer() {
+		return manufacturer;
+	}
+	public void setManufacturer(Integer manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+	public String getOrigin() {
+		return origin;
+	}
+	public void setOrigin(String origin) {
+		this.origin = origin;
 	}
 	@Override
 	public Product dtoToEntity() {

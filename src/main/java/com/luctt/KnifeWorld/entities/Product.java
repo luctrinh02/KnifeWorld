@@ -37,10 +37,10 @@ public class Product implements Serializable{
 	private String material;
 	
 	@Column(name = "blade_length")
-	private String bladeLength;
+	private Integer bladeLength;
 	
 	@Column(name="hilt_length")
-	private String hilt_length;
+	private Integer hilt_length;
 	
 	private BigDecimal price;
 	
@@ -54,20 +54,16 @@ public class Product implements Serializable{
 	
 	private Integer status;
 	
-	private String weight;
+	private Integer weight;
 	
 	@Column(name = "blade_wide")
-	private String bladeWide;
+	private Integer bladeWide;
 	
 	private String image;
 	private String description;
-	@ManyToOne
-	@JoinColumn(name = "manufacturer_id",insertable = false,updatable = false)
-	private Manufacturer manufacturer;
+	private String manufacturer;
 	
-	@ManyToOne
-	@JoinColumn(name = "origin_id",insertable = false,updatable = false)
-	private Origin origin;
+	private String origin;
 	
 	@ManyToOne
 	@JoinColumn(name = "created_by",insertable = false,updatable = false)
@@ -147,15 +143,6 @@ public class Product implements Serializable{
 		this.status = status;
 	}
 
-
-	public Origin getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(Origin origin) {
-		this.origin = origin;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -164,12 +151,21 @@ public class Product implements Serializable{
 		this.user = user;
 	}
 
-	public Manufacturer getManufacturer() {
+
+	public String getManufacturer() {
 		return manufacturer;
 	}
 
-	public void setManufacturer(Manufacturer manufacturer) {
+	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
 	}
 
 	public List<Cart> getCarts() {
@@ -206,39 +202,39 @@ public class Product implements Serializable{
 		this.image = image;
 	}
 	
-
-	public String getBladeLength() {
+	
+	public Integer getBladeLength() {
 		return bladeLength;
 	}
 
-	public void setBladeLength(String bladeLength) {
+	public void setBladeLength(Integer bladeLength) {
 		this.bladeLength = bladeLength;
 	}
 
-	public String getHilt_length() {
+	public Integer getHilt_length() {
 		return hilt_length;
 	}
 
-	public void setHilt_length(String hilt_length) {
+	public void setHilt_length(Integer hilt_length) {
 		this.hilt_length = hilt_length;
 	}
 
-	public String getWeight() {
+	public Integer getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(Integer weight) {
 		this.weight = weight;
 	}
 
-	public String getBladeWide() {
+	public Integer getBladeWide() {
 		return bladeWide;
 	}
 
-	public void setBladeWide(String bladeWide) {
+	public void setBladeWide(Integer bladeWide) {
 		this.bladeWide = bladeWide;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}

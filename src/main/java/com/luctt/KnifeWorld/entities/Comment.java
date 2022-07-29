@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table
@@ -19,7 +20,9 @@ public class Comment implements Serializable{
 	@EmbeddedId
 	private CommentPK commentPK;
 	@Lob
+	@NotBlank(message ="Không bỏ trống nội dung")
 	private String content;
+	@NotBlank(message ="Không bỏ trống đánh giá")
 	private Integer rate;
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false,updatable = false)
