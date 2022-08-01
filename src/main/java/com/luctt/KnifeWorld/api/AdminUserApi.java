@@ -34,21 +34,19 @@ public class AdminUserApi {
 	public AdminUserApi(UserService service) {
 		this.service = service;
 	}
-	
 	@GetMapping("/{id}")
+	public ResponseEntity<?> getById(@PathVariable(name = "id",required = false) Integer id){
+		User u=service.getById(id);
+		HashMap<String, Object> map=GetMap.getData("ok", u);
+		return ResponseEntity.status(HttpStatus.OK).body(map);
+	}
+	@GetMapping("")
 	public ResponseEntity<?> getUsers(@RequestParam(name = "page",defaultValue = "0",required = false) Integer pageNumber
-			,@PathVariable(name = "id",required = false) Integer id
 			) {
-		if(id==null) {
 			Page<User> page=service.getByPage(pageNumber);
 			HashMap<String, Object> map=GetMap.getData("ok", page);
 			return ResponseEntity.status(HttpStatus.OK).body(map);
-		}else {
-			User u=service.getById(id);
-			HashMap<String, Object> map=GetMap.getData("ok", u);
-			return ResponseEntity.status(HttpStatus.OK).body(map);
 		}
-	}
 	@PostMapping("")
 	public ResponseEntity<?> addUser(@Valid UserRequestDto dto,BindingResult result) {
 		if(result.hasErrors()) {

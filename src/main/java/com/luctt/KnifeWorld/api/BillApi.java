@@ -5,6 +5,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +31,11 @@ public class BillApi {
 	public ResponseEntity<?> getHistory(HttpServletRequest request,
 			@RequestParam(name = "page",required = true,defaultValue = "0") Integer page
 			){
-		User u=(User) request.getSession().getAttribute("user");
-		HashMap<String, Object> map=GetMap.getData("ok", billService.getHistory(u, page));
-		return ResponseEntity.ok(map);
+		UserDetails u=(UserDetails)request.getUserPrincipal();
+		System.out.println(u);
+//		User u=(User) request.getUserPrincipal();
+//		HashMap<String, Object> map=GetMap.getData("ok", billService.getHistory(u, page));
+		return ResponseEntity.ok(1);
 	}
 	@PutMapping("")
 	public ResponseEntity<?> remove(@RequestParam(name = "id") Integer id,
