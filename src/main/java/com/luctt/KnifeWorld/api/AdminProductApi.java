@@ -21,15 +21,17 @@ import com.luctt.KnifeWorld.dto.request.ProductRequestDto;
 import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.entities.User;
 import com.luctt.KnifeWorld.service.ProductService;
+import com.luctt.KnifeWorld.service.UserService;
 import com.luctt.KnifeWorld.utilities.GetMap;
 
 @RestController
 @RequestMapping("/api/admin/products")
 public class AdminProductApi {
 	private ProductService service;
-
-	public AdminProductApi(ProductService service) {
+	private UserService userService;
+	public AdminProductApi(ProductService service,UserService userService) {
 		this.service = service;
+		this.userService=userService;
 	}
 
 	@GetMapping("")
@@ -48,13 +50,16 @@ public class AdminProductApi {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<?> insert(@Valid ProductRequestDto dto, BindingResult result) {
+	public ResponseEntity<?> insert(@Valid ProductRequestDto dto, BindingResult result,HttpServletRequest request) {
 		if (result.hasErrors()) {
 			HashMap<String, Object> map = GetMap.getData("error", result.getAllErrors());
 			return ResponseEntity.ok(map);
 		} else {
 			try {
+				String email =request.getUserPrincipal().getName();
+				User u=(User) userService.getByEmail(email);
 				Product p = dto.dtoToEntity();
+				p.setUser(u);
 				p = service.save(p);
 				Page<Product> page = service.getAll(0);
 				HashMap<String, Object> map = GetMap.getData("ok", page);
@@ -106,7 +111,9 @@ public class AdminProductApi {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getProduct(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
 		Product p = service.getById(id);
-		if (p.getUser().equals((User) request.getSession().getAttribute("user"))) {
+		String email =request.getUserPrincipal().getName();
+		User u=(User) userService.getByEmail(email);
+		if (p.getUser().equals(u)) {
 			HashMap<String, Object> map = GetMap.getData("ok", p);
 			return ResponseEntity.ok(map);
 		} else {

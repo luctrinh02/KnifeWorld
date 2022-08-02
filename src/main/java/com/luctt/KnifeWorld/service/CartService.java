@@ -35,4 +35,7 @@ public class CartService {
 	public Optional<Cart> getById(CartPK id) {
 		return repository.findById(id);
 	}
+	public List<Cart> getAllByIds(List<CartPK> ids){
+		return repository.findAllById(ids);
+	}
 }

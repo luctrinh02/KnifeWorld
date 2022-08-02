@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -10,17 +10,23 @@
 </head>
 
 <body>
-	<button onclick="get();">Get</button>
-	<script type="text/javascript">
+	<button th:onclick="get();">Get</button>
+	<a th:href="@{/index.html}">go to index</a>
+	<a th:href="@{../index.html}">go to index2</a>
+	<button th:onclick="gotoindex()">Go to index</button>
+	<script th:inline="javascript">
 		function get(){
 			$.ajax({
-				  url: "http://localhost:8080/api/admin/users",
+				  url: "http://localhost:8080/index",
 				  type:"get",
 				  success: function(response){
-				    console.log(response.data.content);
-				    console.log(response.statusCode);
+				    console.log(response);
+				    //console.log(response.statusCode);
 				  }
 				});
+		}
+		function gotoindex(){
+			window.location.href="/resources/templates/index.html"
 		}
 	</script>
 </body>

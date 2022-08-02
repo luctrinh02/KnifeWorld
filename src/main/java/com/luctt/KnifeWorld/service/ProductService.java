@@ -1,7 +1,9 @@
 package com.luctt.KnifeWorld.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
@@ -48,5 +50,8 @@ public class ProductService {
 	}
 	public Page<Product> adminSearch(String key,Integer pageNumber) {
 		return repository.adminSearch(key,PageRequest.of(pageNumber, AppConstraint.numOfRecord,Sort.by("id").descending()));
+	}
+	public List<Product> getByIds(List<Integer> ids){
+		return repository.findAllById(ids);
 	}
 }
