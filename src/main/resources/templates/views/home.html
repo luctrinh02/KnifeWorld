@@ -1,0 +1,56 @@
+<section class="py-5">
+        <div class="container">
+            <div class="title text-center">
+                <a href="#" class="link-dark">
+                    <h2 class="position-relative d-inline-block">
+                        Dao Ánh</h2>
+                </a>
+            </div>
+            <div class="row gx-0 gy-3" id="content">
+                <div class="col-md-6 col-lg-4 col-xl-3 mt-4 p-2" th:each="obj : ${products.getContent()}" id="knife">
+                    <div class="">
+                        <div class="img position-relative">
+                            <a th:href="@{/product(id=${obj.id})}"><img th:src="@{/imgUpload/{name}(name=${obj.image})}"
+                                    class="productImg"></a>
+                        </div>
+                        <div class="text-center">
+                            <div class="rating mt-3">
+                                <span class="text-warning"> <i class="fas fa-star"></i>
+                                </span> <span class="text-warning"> <i class="fas fa-star"></i>
+                                </span> <span class="text-warning"> <i class="fas fa-star"></i>
+                                </span> <span class="text-warning"> <i class="fas fa-star"></i>
+                                </span> <span class="text-warning"> <i class="fas fa-star"></i>
+                                </span>
+                            </div>
+                            <p class="text-capitalize my-1" th:text="${obj.name}"></p>
+                            <p class="fw-bold" th:text="${obj.price}">
+                               
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-outline-dark more me-2" onclick="them()">Xem thêm</button>
+            <button class="btn btn-outline-dark more me-2" onclick="">Xem thêm</button>
+            <button class="btn btn-outline-dark more me-2" onclick="">Xem thêm</button>
+            <button class="btn btn-outline-dark more me-2" onclick="">Xem thêm</button>
+        </div>
+    </section>
+    <script type="text/javascript">
+    	function them(){
+    		$("loading").show();
+    		$.ajax({
+    			url:"/api/products",
+    			type:"GET",
+    			data:{
+    				page:1
+    			},
+    			success:function(response){
+    				$("#content").html=response;
+    				$("loading").hide();
+    			}
+    		})
+    	}
+    </script>

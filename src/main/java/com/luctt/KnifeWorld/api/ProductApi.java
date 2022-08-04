@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,7 @@ import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.service.ProductService;
 import com.luctt.KnifeWorld.utilities.GetMap;
 
-@RestController
+@Controller
 @RequestMapping("/api/products")
 public class ProductApi {
 	private ProductService service;
@@ -25,18 +27,18 @@ public class ProductApi {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<?> getProducts(@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
-			@RequestParam(name = "keyWord",required = false) String keyWord
+	public String getProducts(@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
+			@RequestParam(name = "keyWord",required = false) String keyWord,Model model
 			){
+		Page page;
 		if(keyWord==null) {
-			Page<Product> page=service.getActiveProduct(pageNumber);
-			HashMap<String, Object> map=GetMap.getData("ok", page);
-			return ResponseEntity.ok(map);
+			page=service.getActiveProduct(pageNumber);
 		}else {
-			Page<Product> page=service.search(keyWord,pageNumber);
-			HashMap<String, Object> map=GetMap.getData("ok", page);
-			return ResponseEntity.ok(map);
+			page=service.search(keyWord,pageNumber);
 		}
+		String conntent="";
+		model.addAttribute("products", page);
+		return "views/home";
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getProduct(@PathVariable(name = "id") Integer id){

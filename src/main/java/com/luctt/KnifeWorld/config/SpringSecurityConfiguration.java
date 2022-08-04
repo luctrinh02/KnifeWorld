@@ -30,10 +30,10 @@ public class SpringSecurityConfiguration implements UserDetailsService {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.authorizeHttpRequests(authz -> authz.antMatchers("/","/home","/product/**").permitAll()
+		http.authorizeHttpRequests(authz -> authz.antMatchers("/","/knife-world/**","/css/**","/images/**","/imgUpload/**","/api/products/**").permitAll()
 				.antMatchers("/api/admin/**").hasRole("0")
 				.anyRequest().hasRole("1")
-				).formLogin().defaultSuccessUrl("/home").usernameParameter("username").permitAll().and()
+				).formLogin().defaultSuccessUrl("/knife-world").usernameParameter("username").permitAll().and()
 			.logout().permitAll();
 		;
 		// @formatter:on

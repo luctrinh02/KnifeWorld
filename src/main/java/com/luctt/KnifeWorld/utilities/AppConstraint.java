@@ -1,7 +1,7 @@
 package com.luctt.KnifeWorld.utilities;
 
 public class AppConstraint {
-	public static int numOfRecord=10;
+	public static int numOfRecord=12;
 	public static String homePage="home";
 	public static String ROLE_ADMIN="0";
 	public static String ROLE_USER="1";
