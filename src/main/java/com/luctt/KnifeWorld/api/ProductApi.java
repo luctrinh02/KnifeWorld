@@ -36,7 +36,6 @@ public class ProductApi {
 		}else {
 			page=service.search(keyWord,pageNumber);
 		}
-		String conntent="";
 		model.addAttribute("products", page);
 		return "views/home";
 	}

@@ -32,17 +32,19 @@ public class UserService {
 	public User getByEmail(String email) {
 		return repository.findByEmail(email);
 	}
-	public Page<User> getByPage(Integer page){
-		return repository.findAll(PageRequest.of(page, AppConstraint.numOfRecord,Sort.by("id").descending()));
+	public Page<User> getByPage(Integer page,String name){
+		return repository.findByFullnameLike("%"+name+"%",PageRequest.of(page, AppConstraint.numOfRecord,Sort.by("id").descending()));
 	}
 	public User save(User u) {
 		return repository.save(u);
 	}
 	public User changeStatus(Integer id,Integer status,HttpServletRequest request) throws IllegalArgumentException,NullPointerException{
 		User u=this.getById(id);
+		String email =request.getUserPrincipal().getName();
+		User user=(User) this.getByEmail(email);
 		if(u==null) {
 			throw new NullPointerException();
-		}else if(u==(User) request.getSession().getAttribute("user") && u.getStatus()==0) {
+		}else if(u.equals(user)) {
 			throw new IllegalArgumentException();
 		}else {
 			u.setStatus(status);

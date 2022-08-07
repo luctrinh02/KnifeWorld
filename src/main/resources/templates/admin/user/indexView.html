@@ -1,0 +1,106 @@
+<th:block th:fragment="userIndex">
+    <div class="card-header">
+        <div class="row d-flex justify-content-start">
+            <div class="col-3">
+                <input id="name" type="text" name="name" class="form-control">
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary" th:onclick="getUser(0,true)">Tìm kiếm</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-secondary" th:onclick="getUser(0,false)">Tất
+                    cả</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+                <th colspan="2">Thao tác</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr class="align-middle" th:each="obj : ${list.getContent()}">
+                    <td th:text="${obj.fullname }"></td>
+                    <td th:text="${obj.email }"></td>
+                    <td th:text="${obj.address }"></td>
+                    <td>
+                        <span th:if="${obj.role==0}">Admin</span>
+                        <span th:if="${obj.role==1}">User</span>
+                    </td>
+                    <td>
+                        <span th:if="${obj.status==0}" class="text-success">Hoạt động</span>
+                        <span th:if="${obj.status==1}" class="text-secondary">Ngừng hoạt động</span>
+                    </td>
+                    <td><a th:href="@{/admin/users/edit(id=${obj.id)}}" class="btn btn-primary">Cập nhật</a></td>
+                    <td>
+                        <button th:if="${obj.status==0}" type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#checkXoa'+${obj.id }">Vô
+                            hiệu</button>
+                        <button type="button" th:if="${obj.status==1}" class="btn btn-success" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#checkXoa'+${obj.id }">
+                            Hiệu lực</button>
+                        <!-- Modal -->
+                        <div class="modal fade" th:id="'checkXoa'+${obj.id }" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div th:if="${obj.status==0 }">
+                                        <div class="modal-body">Bạn chắc chắn muốn vô hiệu
+                                            tài khoản này?</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Huỷ</button>
+                                            <button th:onclick="changeStatus([[${obj.id}]],1)" data-bs-dismiss="modal" type="button"
+                                                class="btn btn-danger">Đồng
+                                                ý</button>
+                                        </div>
+                                    </div>
+                                    <div th:if="${obj.status==1 }">
+                                        <div class="modal-body">Bạn chắc chắn muốn khôi phục
+                                            tài khoản này?</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" 
+                                                data-bs-dismiss="modal">Huỷ</button>
+                                            <button type="button" th:onclick="changeStatus([[${obj.id}]],0)" class="btn btn-primary" data-bs-dismiss="modal">Đồng
+                                                ý</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end modal -->
+                    </td>
+                    <td th:if="${obj.role==1}"><a href="/admin/bills/history?id=${obj.id }" class="btn btn-primary">Lịch
+                            sử</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer" th:if="${list.getTotalPages()!=0}">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0}" th:onclick="getUser(0,false)">
+                <span class="fas fa-backward"></span>
+            </button> <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0} "
+                th:onclick="getUser(${list.getNumber()-1},false)"> <span class="fas fa-backward-step"></span>
+            </button>
+            <h3>[[${list.getNumber()+1 }]]/[[${list.getTotalPages() }]]</h3>
+            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
+                th:onclick="getUser(${list.getNumber()+1},false)"> <span class="fas fa-forward-step"></span>
+            </button> <button class="btn btn-primary" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
+                th:onclick="getUser(list.getTotalPages()-1,false)">
+                <span class="fas fa-forward"></span>
+            </button>
+        </div>
+    </div>
+</th:block>

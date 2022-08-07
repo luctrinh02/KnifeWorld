@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="card" id="content" th:insert="~{admin/user/indexView :: userIndex}">
+      
+    </div>
+    <script>
+        function getUser(page,isSearch) {
+            $("#loading").show();
+            let name="";
+            if(isSearch==true){
+                name=$("#name").val();
+            }
+            $.ajax({
+                url: "/api/admin/users",
+                type: "GET",
+                data: {
+                    name: name,
+                    page: page
+                },
+                success: function (response) {
+                    $("#content").html(response);
+                    $("#name").val(name);
+                    $("#loading").hide();
+                },
+            });
+        }
+        function changeStatus(id,status){
+            $("#loading").show();
+            $.ajax({
+                url: "/api/admin/users/"+id,
+                type: "PATCH",
+                data: {
+                    status: status
+                },
+                success: function (response) {
+                    $("#loading").hide();
+                    console.log(response);
+                    if(response.statusCode=="error"){
+                        Toast.fire({
+							icon: 'error',
+							title: response.data
+						});
+                    }else{
+                        getUser(0,false);
+                    }
+                },
+            });
+        }
+    </script>
+</body>
+
+</html>

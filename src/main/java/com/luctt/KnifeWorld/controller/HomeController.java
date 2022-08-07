@@ -12,7 +12,7 @@ import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.service.ProductService;
 
 @Controller
-@RequestMapping("knife-world")
+@RequestMapping("/knife-world")
 public class HomeController {
 	@Autowired
 	private ProductService service;
@@ -21,5 +21,9 @@ public class HomeController {
 		Page<Product> page=service.getActiveProduct(0);
 		model.addAttribute("products", page);
 		return "guest/home";
+	}
+	@GetMapping("/registry")
+	public String registry(Model model){
+		return "guest/registry";
 	}
 }

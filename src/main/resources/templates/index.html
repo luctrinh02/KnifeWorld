@@ -20,7 +20,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
         integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/script.js}"></script>
 </head>
 
 <body>
@@ -60,24 +62,24 @@
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <!-- Chưa đăng nhập -->
-                                    <li sec:authorize="!isAuthenticated()"><button class="dropdown-item" onclick="">Đăng
-                                            ký</button></li>
-                                    <li sec:authorize="!isAuthenticated()"><button class="dropdown-item" onclick="">Đăng
-                                            nhập</button></li>
+                                    <li sec:authorize="!isAuthenticated()"><a class="dropdown-item" th:href="@{/knife-world/registry}">Đăng
+                                            ký</a></li>
+                                    <li sec:authorize="!isAuthenticated()"><a class="dropdown-item" th:href="@{/login}">Đăng
+                                            nhập</a></li>
                                     <li sec:authorize="!isAuthenticated()"><button class="dropdown-item" onclick="">Quên
                                             mật khẩu</button></li>
                                     <!-- Đã đăng nhập user -->
-                                    <li sec:authorize="hasRole('1')"><button class="dropdown-item" onclick="">Đăng xuất</button></li>
-                                    <li sec:authorize="hasRole('1')"><button class="dropdown-item" onclick="">Đổi mật khẩu</button></li>
-                                    <li sec:authorize="hasRole('1')"><button class="dropdown-item" onclick="">Thay đổi thông
+                                    <li sec:authorize="hasRole('1') or hasRole('0')"><a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a></li>
+                                    <li sec:authorize="hasRole('1') or hasRole('0')"><a class="dropdown-item" >Đổi mật khẩu</a></li>
+                                    <li sec:authorize="hasRole('1') or hasRole('0')"><button class="dropdown-item" onclick="">Thay đổi thông
                                             tin</button></li>
                                     <li sec:authorize="hasRole('1')"><button class="dropdown-item" onclick="">Lịch
                                             sử</button></li>
                                     <!-- Đã đăng nhập admin -->
-                                    <li sec:authorize="hasRole('0')"><button class="dropdown-item" onclick="">Quản
+                                    <li sec:authorize="hasRole('0')"><button class="dropdown-item" th:href="@{/admin/products}">Quản
                                             lý sản phẩm</button></li>
-                                    <li sec:authorize="hasRole('0')"><button class="dropdown-item" onclick="">Quản
-                                            lý user</button></li>
+                                    <li sec:authorize="hasRole('0')"><a class="dropdown-item" th:href="@{/admin/users}">Quản
+                                            lý user</a></li>
                                     <li sec:authorize="hasRole('0')"><button class="dropdown-item" onclick="">Quản
                                             lý hoá đơn</button></li>
                                 </ul>

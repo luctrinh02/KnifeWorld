@@ -40,13 +40,7 @@ public class AdminUserApi {
 		HashMap<String, Object> map=GetMap.getData("ok", u);
 		return ResponseEntity.status(HttpStatus.OK).body(map);
 	}
-	@GetMapping("")
-	public ResponseEntity<?> getUsers(@RequestParam(name = "page",defaultValue = "0",required = false) Integer pageNumber
-			) {
-			Page<User> page=service.getByPage(pageNumber);
-			HashMap<String, Object> map=GetMap.getData("ok", page);
-			return ResponseEntity.status(HttpStatus.OK).body(map);
-		}
+	
 	@PostMapping("")
 	public ResponseEntity<?> addUser(@Valid UserRequestDto dto,BindingResult result) {
 		if(result.hasErrors()) {
@@ -57,7 +51,7 @@ public class AdminUserApi {
 			User u=dto.dtoToEntity();
 			try {
 				u=service.save(u);
-				Page<User> page=service.getByPage(0);
+				Page<User> page=service.getByPage(0,"");
 				HashMap<String, Object> map=GetMap.getData("ok", page);
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {
@@ -72,14 +66,12 @@ public class AdminUserApi {
 			){
 		try {
 			service.changeStatus(id,status,request);
-			Page<User> page=service.getByPage(pageNumer);
-			HashMap<String, Object> map=GetMap.getData("ok", page);
-			return ResponseEntity.ok(map);
+			return null;
 		} catch (NullPointerException e) {
-			HashMap<String, Object> map=GetMap.getData("ok", "Không tồn tại người dùng này");
+			HashMap<String, Object> map=GetMap.getData("error", "Không tồn tại người dùng này");
 			return ResponseEntity.ok(map);
 		} catch (IllegalArgumentException e) {
-			HashMap<String, Object> map=GetMap.getData("ok", "Không thể tự vô hiệu chính mình");
+			HashMap<String, Object> map=GetMap.getData("error", "Không thể tự vô hiệu chính mình");
 			return ResponseEntity.ok(map);
 		}
 	}
@@ -94,7 +86,7 @@ public class AdminUserApi {
 			try {
 				u.setId(id);
 				u=service.save(u);
-				Page<User> page=service.getByPage(0);
+				Page<User> page=service.getByPage(0,"");
 				HashMap<String, Object> map=GetMap.getData("ok", page);
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {

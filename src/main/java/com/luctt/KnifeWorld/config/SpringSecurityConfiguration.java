@@ -4,14 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.luctt.KnifeWorld.service.UserService;
@@ -30,11 +27,11 @@ public class SpringSecurityConfiguration implements UserDetailsService {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.authorizeHttpRequests(authz -> authz.antMatchers("/","/knife-world/**","/css/**","/images/**","/imgUpload/**","/api/products/**").permitAll()
-				.antMatchers("/api/admin/**").hasRole("0")
+		http.authorizeHttpRequests(authz -> authz.antMatchers("/","/knife-world/**","/css/**","/images/**","/js/**","/imgUpload/**","/api/products/**").permitAll()
+				.antMatchers("/api/admin/**","/admin/**").hasRole("0")
 				.anyRequest().hasRole("1")
-				).formLogin().defaultSuccessUrl("/knife-world").usernameParameter("username").permitAll().and()
-			.logout().permitAll();
+				).formLogin().defaultSuccessUrl("/knife-world").permitAll().and()
+			.logout().logoutSuccessUrl("/knife-world").permitAll().and().csrf().disable().cors();;
 		;
 		// @formatter:on
 		return http.build();
