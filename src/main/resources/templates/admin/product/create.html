@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="return false;" method="post" id="formData">
+        <div>
+            <label>Tên sản phẩm</label> <input name="name" type="text" class="form-control" autocomplete="off">
+            <span class="text-danger small" id="name"></span>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4">
+                <label>Xuất xứ</label> <input name="origin" type="text" class="form-control">
+                <span class="text-danger small" id="origin"></span>
+            </div>
+            <div class="col-4">
+                <label>Chất liệu</label> <input name="material" type="text" class="form-control" autocomplete="off">
+                <span class="text-danger small" id="material"></span>
+            </div>
+            <div class="col-4">
+                <label>Trọng lượng</label>
+                <div class="input-group">
+                    <input name="weight" type="number" class="form-control" value=0>
+                    <span class="input-group-text">g</span>
+                </div>
+                <span class="text-danger small" id="weight"></span>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4">
+                <label>Độ dài lưỡi</label>
+                <div class="input-group">
+                    <input name="bladeLength" type="number" class="form-control" autocomplete="off" value=0>
+                    <span class="input-group-text">mm</span>
+                </div>
+                <span class="text-danger small" id="bladeLength"></span>
+            </div>
+            <div class="col-4">
+                <label>Độ dài cán</label>
+                <div class="input-group">
+                    <input name="hiltLength" type="number" class="form-control" value=0>
+                    <span class="input-group-text">mm</span>
+                </div>
+                <span class="text-danger small" id="hiltLength"></span>
+            </div>
+            <div class="col-4">
+                <label>Độ dày</label>
+                <div class="input-group">
+                    <input name="bladeWide" type="number" class="form-control" autocomplete="off" value=0>
+                    <span class="input-group-text">mm</span>
+                </div>
+                <span class="text-danger small" id="bladeWide"></span>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4">
+                <label>Số lượng</label> <input name="amount" type="number" class="form-control" value="0">
+                <span class="text-danger small" id="amount"></span>
+            </div>
+            <div class="col-8">
+                <label>Đơn giá</label>
+                <div class="input-group">
+                    <input name="price" type="number" class="form-control" autocomplete="off" value="0">
+                    <span class="input-group-text">vnđ</span>
+                </div>
+                <span class="text-danger small" id="price"></span>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label>Hình ảnh</label> <input name="img" type="file" class="form-control" accept=".jpg,.png">
+        </div>
+        <div class="mt-2">
+            <label>Mô tả</label>
+            <textarea rows="3" name="description" placeholder="Ghi mô tả vào đây" class="form-control"></textarea>
+        </div>
+        <div class="mt-2">
+            <button type="reset" class="btn btn-secondary">Xoá form</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm
+                mới</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Bạn có chắn muốn thêm sản phẩm này</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nghĩ lại</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="add()">Thêm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        function hideError() {
+            $("#name").text("");
+            $("#origin").text("");
+            $("#bladeLength").text("");
+            $("#hiltLength").text("");
+            $("#weight").text("");
+            $("#bladeWide").text("");
+            $("#material").text("");
+            $("#amount").text("");
+            $("#price").text("");
+        }
+        function add() {
+            hideError();
+            let data=new FormData($("#formData")[0]);
+            $.ajax({
+                url: "/api/admin/products",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (response) {console.log(response)
+                    if (response.statusCode == "error") {
+                        for (let i = 0; i < response.data.length; i++) {
+                            var selector = document.getElementById(response.data[i].field);
+                            selector.innerText = response.data[i].defaultMessage;
+                        }
+                    } else if (response.statusCode == "ok") {
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Thêm thành công"
+                        });
+                        sleep(1000).then(() => {
+                            window.location.href = "/admin/products";
+                        });
+                    } else{
+                        Toast.fire({
+                            icon: 'error',
+                            title: "Sever mệt rồi"
+                        });
+                    }
+                },
+                error: function (xhr) {
+
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

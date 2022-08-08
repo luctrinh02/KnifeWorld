@@ -77,7 +77,7 @@ public class UserRequestDto implements DtoAdapter<UserRequestDto, User>{
 		u.setEmail(this.getEmail());
 		u.setFullname(this.getFullname());
 		u.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
-		u.setRole(this.getRole()==null?1:0);
+		u.setRole(this.getRole()==null?1:this.getRole());
 		u.setStatus(0);
 		return u;
 	}

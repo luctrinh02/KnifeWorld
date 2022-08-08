@@ -14,15 +14,17 @@ import org.springframework.stereotype.Service;
 import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.entities.User;
 import com.luctt.KnifeWorld.repository.IProductRepository;
+import com.luctt.KnifeWorld.repository.IUserRepository;
 import com.luctt.KnifeWorld.utilities.AppConstraint;
 @Service
 public class ProductService {
 	private IProductRepository repository;
+	private IUserRepository userRepository;
 
-	public ProductService(IProductRepository repository) {
+	public ProductService(IProductRepository repository, IUserRepository userRepository) {
 		this.repository = repository;
+		this.userRepository = userRepository;
 	}
-	
 	public Page<Product> getActiveProduct(Integer pageNumber){
 		return repository.findActive(PageRequest.of(pageNumber, AppConstraint.numOfRecord,Sort.by("id").descending()));
 	}
@@ -38,7 +40,9 @@ public class ProductService {
 	}
 	public Product changeStatus(Integer id,Integer status,HttpServletRequest request) throws Exception{
 		Product p=this.getById(id);
-		if(p.getUser().equals((User)request.getSession().getAttribute("user"))) {
+		String email =request.getUserPrincipal().getName();
+		User user=(User) userRepository.findByEmail(email);
+		if(p.getUser().equals(user)) {
 			p.setStatus(status);
 			return this.save(p);
 		}else {

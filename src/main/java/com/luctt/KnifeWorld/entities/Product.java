@@ -40,7 +40,7 @@ public class Product implements Serializable{
 	private Integer bladeLength;
 	
 	@Column(name="hilt_length")
-	private Integer hilt_length;
+	private Integer hiltLength;
 	
 	private BigDecimal price;
 	
@@ -61,7 +61,6 @@ public class Product implements Serializable{
 	
 	private String image;
 	private String description;
-	private String manufacturer;
 	
 	private String origin;
 	
@@ -151,15 +150,6 @@ public class Product implements Serializable{
 		this.user = user;
 	}
 
-
-	public String getManufacturer() {
-		return manufacturer;
-	}
-
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
-	}
-
 	public String getOrigin() {
 		return origin;
 	}
@@ -211,12 +201,14 @@ public class Product implements Serializable{
 		this.bladeLength = bladeLength;
 	}
 
-	public Integer getHilt_length() {
-		return hilt_length;
+	
+
+	public Integer getHiltLength() {
+		return hiltLength;
 	}
 
-	public void setHilt_length(Integer hilt_length) {
-		this.hilt_length = hilt_length;
+	public void setHiltLength(Integer hiltLength) {
+		this.hiltLength = hiltLength;
 	}
 
 	public Integer getWeight() {
@@ -246,9 +238,9 @@ public class Product implements Serializable{
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", material=" + material + ", bladeLength=" + bladeLength
-				+ ", hilt_length=" + hilt_length + ", price=" + price + ", amount=" + amount + ", createdDate="
+				+ ", hilt_length=" + hiltLength + ", price=" + price + ", amount=" + amount + ", createdDate="
 				+ createdDate + ", lastChangedDate=" + lastChangedDate + ", status=" + status + ", weight=" + weight
-				+ ", bladeWide=" + bladeWide + ", manufacturer=" + manufacturer + ", origin=" + origin + ", user="
+				+ ", bladeWide=" + bladeWide + ", origin=" + origin + ", user="
 				+ user + "]";
 	}
 }

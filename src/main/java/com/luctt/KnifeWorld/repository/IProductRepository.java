@@ -14,6 +14,6 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 	Page<Product> findActive(Pageable page);
 	@Query("SELECT p FROM Product p WHERE p.status=0 and p.amount>0")
 	Page<Product> search(String keyWord,Pageable page);
-	@Query("SELECT p FROM Product p WHERE p.status=0")
+	@Query("SELECT p FROM Product p")
 	Page<Product> adminSearch(String keyWord,Pageable page);
 }

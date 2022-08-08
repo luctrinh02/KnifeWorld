@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <a class="btn btn-primary mt-3 mb-3" href="/admin/users/create">Thêm
+        mới</a>
     <div class="card" id="content" th:insert="~{admin/user/indexView :: userIndex}">
       
     </div>
@@ -43,7 +45,6 @@
                 },
                 success: function (response) {
                     $("#loading").hide();
-                    console.log(response);
                     if(response.statusCode=="error"){
                         Toast.fire({
 							icon: 'error',
@@ -51,6 +52,10 @@
 						});
                     }else{
                         getUser(0,false);
+                        Toast.fire({
+							icon: 'success',
+							title: status==true?"Hiệu lực thành công":"Vô hiệu thành công"
+						});
                     }
                 },
             });

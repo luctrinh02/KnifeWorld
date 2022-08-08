@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luctt.KnifeWorld.entities.User;
@@ -32,4 +33,14 @@ public class UserController {
 			model.addAttribute("list", list);
 			return "admin/user/indexView";
 		}
+	@GetMapping("/admin/users/create")
+	public String newUser() {
+		return "admin/user/create";
+	}
+	@GetMapping("/admin/users/{id}")
+	public String update(Model model,@PathVariable(name = "id") Integer id) {
+		User u=service.getById(id);
+		model.addAttribute("user", u);
+		return "admin/user/update";
+	}
 }

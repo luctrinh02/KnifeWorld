@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="card-body">
+        <div class="row mt-2">
+            <label>Họ tên <span class="text-danger">*</span></label>
+            <div>
+                <input name="fullname" type="text" class="form-control" th:value="${user.fullname }" required>
+                <span class="text-danger small" id="fullname"></span>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <label>Địa chỉ <span class="text-danger">*</span></label>
+            <div>
+                <input type="text" class="form-control" name="address" th:value="${user.address }">
+                <span class="text-danger small" id="address"></span>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <label>Email <span class="text-danger">*</span></label>
+            <div>
+                <input type="email" class="form-control" name="email" required th:value="${user.email }">
+                <span class="text-danger small" id="email"></span>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label for="gtDangKy">role</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" id="namDangKy" value="1" th:checked="${user.role==1}"
+                    > <label class="form-check-label" for="user">User</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" value="0" th:checked="${user.role==0}"> <label
+                    class="form-check-label" for="admin">Admin</label>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateUser">Sửa</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Bạn có chắn muốn sửa người dùng này?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nghĩ lại</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:onclick="update([[${id}]])">Sửa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function hideError() {
+            $("#fullname").text("");
+            $("#address").text("");
+            $("#email").text("");
+        }
+        function update(id) {
+            hideError();
+            let fullname = $("input[name='fullname']").val();
+            let address = $("input[name='address']").val();
+            let email = $("input[name='email']").val();
+            let password = "123456789";
+            let role = $("input[name='role']:checked").val();
+            $.ajax({
+                url: "/api/admin/users/"+id,
+                type: "PUT",
+                data: {
+                    fullname: fullname,
+                    address: address,
+                    email: email,
+                    password: password,
+                    role: role
+                },
+                success: function (response) {
+                    if (response.statusCode == "error") {
+                        for (let i = 0; i < response.data.length; i++) {
+                            var selector = document.getElementById(response.data[i].field);
+                            selector.innerText = response.data[i].defaultMessage;
+                        }
+                    } else if (response.statusCode == "ok") {
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Sửa thành công"
+                        });
+                        sleep(1000).then(() => {
+                            window.location.href = "/admin/users";
+                        });
+                    } else {
+                        $("#email").text(response.data);
+                    }
+                },
+                error: function (xhr) {
+
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

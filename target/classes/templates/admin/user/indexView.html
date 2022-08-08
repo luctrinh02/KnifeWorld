@@ -37,7 +37,7 @@
                         <span th:if="${obj.status==0}" class="text-success">Hoạt động</span>
                         <span th:if="${obj.status==1}" class="text-secondary">Ngừng hoạt động</span>
                     </td>
-                    <td><a th:href="@{/admin/users/edit(id=${obj.id)}}" class="btn btn-primary">Cập nhật</a></td>
+                    <td><a th:href="@{/admin/users/{id}(id=${obj.id})}" class="btn btn-primary">Cập nhật</a></td>
                     <td>
                         <button th:if="${obj.status==0}" type="button" class="btn btn-danger" data-bs-toggle="modal"
                         th:attr="data-bs-target='#checkXoa'+${obj.id }">Vô
@@ -89,16 +89,16 @@
     </div>
     <div class="card-footer" th:if="${list.getTotalPages()!=0}">
         <div class="d-flex justify-content-center">
-            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0}" th:onclick="getUser(0,false)">
+            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0}" th:onclick="getUser(0,true)">
                 <span class="fas fa-backward"></span>
             </button> <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0} "
-                th:onclick="getUser(${list.getNumber()-1},false)"> <span class="fas fa-backward-step"></span>
+                th:onclick="getUser([[${list.getNumber()-1}]],true)"> <span class="fas fa-backward-step"></span>
             </button>
             <h3>[[${list.getNumber()+1 }]]/[[${list.getTotalPages() }]]</h3>
             <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
-                th:onclick="getUser(${list.getNumber()+1},false)"> <span class="fas fa-forward-step"></span>
+                th:onclick="getUser([[${list.getNumber()+1}]],true)"> <span class="fas fa-forward-step"></span>
             </button> <button class="btn btn-primary" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
-                th:onclick="getUser(list.getTotalPages()-1,false)">
+                th:onclick="getUser([[${list.getTotalPages()-1}]],true)">
                 <span class="fas fa-forward"></span>
             </button>
         </div>

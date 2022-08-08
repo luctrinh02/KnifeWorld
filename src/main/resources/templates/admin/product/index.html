@@ -9,20 +9,20 @@
 </head>
 
 <body>
-    <a class="btn btn-primary mt-3 mb-3" href="/admin/users/create">Thêm
+    <a class="btn btn-primary mt-3 mb-3" href="/admin/products/create">Thêm
         mới</a>
-    <div class="card" id="content" th:insert="~{admin/user/indexView :: userIndex}">
+    <div class="card" id="content" th:insert="~{admin/product/indexView :: productIndex}">
       
     </div>
     <script>
-        function getUser(page,isSearch) {
+        function getProduct(page,isSearch) {
             $("#loading").show();
             let name="";
             if(isSearch==true){
                 name=$("#name").val();
             }
             $.ajax({
-                url: "/api/admin/users",
+                url: "/api/admin/products",
                 type: "GET",
                 data: {
                     name: name,
@@ -31,14 +31,14 @@
                 success: function (response) {
                     $("#content").html(response);
                     $("#name").val(name);
-                    $("#loading").hide();
+                    $("#loading").hide();console.log(response)
                 },
             });
         }
         function changeStatus(id,status){
             $("#loading").show();
             $.ajax({
-                url: "/api/admin/users/"+id,
+                url: "/api/admin/products/"+id,
                 type: "PATCH",
                 data: {
                     status: status
@@ -51,10 +51,10 @@
 							title: response.data
 						});
                     }else{
-                        getUser(0,false);
+                        getProduct(0,false);
                         Toast.fire({
 							icon: 'success',
-							title: status==true?"Hiệu lực thành công":"Vô hiệu thành công"
+							title: status==0?"Hiệu lực thành công":"Vô hiệu thành công"
 						});
                     }
                 },

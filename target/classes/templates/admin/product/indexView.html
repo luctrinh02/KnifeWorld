@@ -1,0 +1,113 @@
+<th:block th:fragment="productIndex">
+    <div class="card-header">
+        <div class="row d-flex justify-content-start">
+            <div class="col-3">
+                <input id="name" type="text" name="name" class="form-control">
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary" th:onclick="getProduct(0,true)">Tìm kiếm</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-secondary" th:onclick="getProduct(0,false)">Tất
+                    cả</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <th>Tên</th>
+                <th>Xuất xứ</th>
+                <th>Độ dài lưỡi</th>
+                <th>Độ dài cán</th>
+                <th>Trọng lượng</th>
+                <th>Độ dày</th>
+                <th>Chất liệu</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Hình ảnh</th>
+                <th>Trạng thái</th>
+                <th>Người tạo</th>
+                <th colspan="2">Thao tác</th>
+            </thead>
+            <tbody>
+                <tr class="align-middle" th:each="obj : ${list.getContent()}">
+                    <td th:text="${obj.name }"></td>
+                    <td th:text="${obj.origin }"></td>
+                    <td th:text="${obj.bladeLength } +'mm'"></td>
+                    <td th:text="${obj.hiltLength } +'mm'"></td>
+                    <td th:text="${obj.weight} +'g'"> </td>
+                    <td th:text="${obj.bladeWide}  +'mm'"></td>
+                    <td th:text="${obj.material}"></td>
+                    <td th:text="${obj.amount}"></td>
+                    <td th:text="${#numbers.formatDecimal(obj.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></td>
+                    <td>
+                        <img th:if="${obj.image!=null}" class="imgIcon" th:src="@{/imgUpload/{img}(img=${obj.image })}">
+                        <span th:if="${obj.image==null}">No image</span>
+                    </td>
+                    <td th:switch="${obj.status}">
+                        <span th:case="0" class="text-success">Kinh doanh</span>
+                        <span th:case="1" class="text-secondary">Ngừng kinh doanh</span>
+                    </td>
+                    <td th:text="${obj.user.fullname}"></td>
+                    <td><a th:href="@{/admin/products/{id}(id=${obj.id })}" class="btn btn-primary"><i class="fa-solid fa-pen"></i></a></td>
+                    <td>
+                        <button th:if="${obj.status==0}" type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            th:attr="data-bs-target='#checkXoa'+${obj.id }"><i class="fa-solid fa-recycle"></i></button>
+                        <button th:if="${obj.status==1}" type="button" class="btn btn-success" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#checkXoa'+${obj.id }">
+                        <i class="fa-solid fa-circle-play"></i></button> <!-- Modal -->
+                        <div class="modal fade" th:id="'checkXoa'+${obj.id }" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <th:block th:if="${obj.status==0 }">
+                                        <div class="modal-body">Bạn chắc chắn muốn ngừng kinh
+                                            doanh sản phẩm này?</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Huỷ</button>
+                                            <button th:onclick="changeStatus([[${obj.id}]],1)" type="button" data-bs-dismiss="modal" class="btn btn-danger">Đồng
+                                                ý</button>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${obj.status==1 }">
+                                        <div class="modal-body">Bạn chắc chắn muốn kinh doanh
+                                            tiếp sản phẩm này?</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Huỷ</button>
+                                            <button th:onclick="changeStatus([[${obj.id}]],0)" type="button" data-bs-dismiss="modal" class="btn btn-primary">Đồng
+                                                ý</button>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div> <!-- end modal -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer" th:if="${list.getTotalPages()!=0}">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0}" th:onclick="getProduct(0,true)">
+                <span class="fas fa-backward"></span>
+            </button> <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==0} "
+                th:onclick="getProduct([[${list.getNumber()-1}]],true)"> <span class="fas fa-backward-step"></span>
+            </button>
+            <h3>[[${list.getNumber()+1 }]]/[[${list.getTotalPages() }]]</h3>
+            <button class="btn btn-primary me-1" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
+                th:onclick="getProduct([[${list.getNumber()+1}]],true)"> <span class="fas fa-forward-step"></span>
+            </button> <button class="btn btn-primary" th:disabled="${list.getNumber()==list.getTotalPages()-1}"
+                th:onclick="getProduct([[${list.getTotalPages()-1}]],true)">
+                <span class="fas fa-forward"></span>
+            </button>
+        </div>
+    </div>
+</th:block>

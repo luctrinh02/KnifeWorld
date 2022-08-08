@@ -45,7 +45,7 @@ public class AdminUserApi {
 	public ResponseEntity<?> addUser(@Valid UserRequestDto dto,BindingResult result) {
 		if(result.hasErrors()) {
 			List<ObjectError> list=result.getAllErrors();
-			HashMap<String, Object> map=GetMap.getData("ok", list);
+			HashMap<String, Object> map=GetMap.getData("error", list);
 			return ResponseEntity.status(200).body(map);
 		}else {
 			User u=dto.dtoToEntity();
@@ -55,7 +55,7 @@ public class AdminUserApi {
 				HashMap<String, Object> map=GetMap.getData("ok", page);
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {
-				HashMap<String, Object> map=GetMap.getData("error", "Email bị trùng lặp");
+				HashMap<String, Object> map=GetMap.getData("errorEmail", "Email bị trùng lặp");
 				return ResponseEntity.status(200).body(map);
 			}
 		}
@@ -75,22 +75,25 @@ public class AdminUserApi {
 			return ResponseEntity.ok(map);
 		}
 	}
-	@PutMapping("")
-	public ResponseEntity<?> update(@Valid UserRequestDto dto,BindingResult result,@RequestParam(name = "id") Integer id) {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@Valid UserRequestDto dto,BindingResult result,@PathVariable(name = "id") Integer id) {
 		if(result.hasErrors()) {
 			List<ObjectError> list=result.getAllErrors();
-			HashMap<String, Object> map=GetMap.getData("ok", list);
+			HashMap<String, Object> map=GetMap.getData("error", list);
 			return ResponseEntity.status(200).body(map);
 		}else {
-			User u=dto.dtoToEntity();
+			User u=service.getById(id);
 			try {
 				u.setId(id);
+				u.setFullname(dto.getFullname());
+				u.setAddress(dto.getAddress());
+				u.setEmail(dto.getEmail());
+				u.setRole(dto.getRole());
 				u=service.save(u);
-				Page<User> page=service.getByPage(0,"");
-				HashMap<String, Object> map=GetMap.getData("ok", page);
+				HashMap<String, Object> map=GetMap.getData("ok", "Sửa thành công");
 				return ResponseEntity.status(200).body(map);
 			} catch (Exception e) {
-				HashMap<String, Object> map=GetMap.getData("error", "Email bị trùng lặp");
+				HashMap<String, Object> map=GetMap.getData("errorEmail", "Email bị trùng lặp");
 				return ResponseEntity.status(200).body(map);
 			}
 		}

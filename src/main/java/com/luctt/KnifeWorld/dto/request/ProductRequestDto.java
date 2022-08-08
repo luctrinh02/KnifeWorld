@@ -1,6 +1,9 @@
 package com.luctt.KnifeWorld.dto.request;
 
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -34,13 +37,11 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 	@Positive(message = "Là số nguyên lớn hơn 0")
 	@Size(max = 5, message = " Quá dày")
 	private String bladeWide;
-	@NotBlank(message = "Không bỏ trống hình ảnh")
 	private String image;
-	@NotBlank(message = "Không bỏ trống hãng chế tác")
-	private Integer manufacturer;
 	@NotBlank(message = "Không bỏ trống nguồn gốc")
 	private String origin;
 	private Integer userId;
+	private String description;
 	public String getName() {
 		return name;
 	}
@@ -115,22 +116,35 @@ public class ProductRequestDto implements DtoAdapter<ProductRequestDto, Product>
 		this.id = id;
 	}
 	
-	public Integer getManufacturer() {
-		return manufacturer;
-	}
-	public void setManufacturer(Integer manufacturer) {
-		this.manufacturer = manufacturer;
-	}
 	public String getOrigin() {
 		return origin;
 	}
 	public void setOrigin(String origin) {
 		this.origin = origin;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@Override
 	public Product dtoToEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		Product p=new Product();
+		p.setAmount(Integer.parseInt(this.getAmount()));
+		p.setBladeLength(Integer.parseInt(this.getBladeLength()));
+		p.setBladeWide(Integer.parseInt(this.getBladeWide()));
+		p.setCreatedDate(new Date());
+		p.setDescription(this.getDescription());
+		p.setHiltLength(Integer.parseInt(this.getHiltLength()));
+		p.setMaterial(this.getMaterial());
+		p.setName(this.getName());
+		p.setOrigin(this.getOrigin());
+		p.setPrice(new BigDecimal(this.getPrice()));
+		p.setStatus(0);
+		p.setWeight(Integer.parseInt(this.getWeight()));
+		return p;
 	}
 	
 	

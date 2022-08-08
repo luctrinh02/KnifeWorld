@@ -30,7 +30,7 @@ public class ProductApi {
 	public String getProducts(@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
 			@RequestParam(name = "keyWord",required = false) String keyWord,Model model
 			){
-		Page page;
+		Page<Product> page;
 		if(keyWord==null) {
 			page=service.getActiveProduct(pageNumber);
 		}else {

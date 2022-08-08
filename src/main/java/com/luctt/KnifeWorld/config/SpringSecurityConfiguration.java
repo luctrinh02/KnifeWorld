@@ -30,7 +30,7 @@ public class SpringSecurityConfiguration implements UserDetailsService {
 		http.authorizeHttpRequests(authz -> authz.antMatchers("/","/knife-world/**","/css/**","/images/**","/js/**","/imgUpload/**","/api/products/**").permitAll()
 				.antMatchers("/api/admin/**","/admin/**").hasRole("0")
 				.anyRequest().hasRole("1")
-				).formLogin().defaultSuccessUrl("/knife-world").permitAll().and()
+				).rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000).and().formLogin().defaultSuccessUrl("/knife-world").permitAll().and()
 			.logout().logoutSuccessUrl("/knife-world").permitAll().and().csrf().disable().cors();;
 		;
 		// @formatter:on
