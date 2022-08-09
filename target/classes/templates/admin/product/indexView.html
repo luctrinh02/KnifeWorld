@@ -50,7 +50,7 @@
                         <span th:case="1" class="text-secondary">Ngừng kinh doanh</span>
                     </td>
                     <td th:text="${obj.user.fullname}"></td>
-                    <td><a th:href="@{/admin/products/{id}(id=${obj.id })}" class="btn btn-primary"><i class="fa-solid fa-pen"></i></a></td>
+                    <td><button th:onclick="update([[${obj.id}]])" class="btn btn-primary"><i class="fa-solid fa-pen"></i></button></td>
                     <td>
                         <button th:if="${obj.status==0}" type="button" class="btn btn-danger" data-bs-toggle="modal"
                             th:attr="data-bs-target='#checkXoa'+${obj.id }"><i class="fa-solid fa-recycle"></i></button>

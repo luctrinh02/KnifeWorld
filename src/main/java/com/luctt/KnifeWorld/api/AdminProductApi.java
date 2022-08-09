@@ -2,7 +2,16 @@ package com.luctt.KnifeWorld.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,31 +46,38 @@ public class AdminProductApi {
 	private ServletContext app;
 	private ProductService service;
 	private UserService userService;
-	public AdminProductApi(ProductService service,UserService userService) {
+
+	public AdminProductApi(ProductService service, UserService userService) {
 		this.service = service;
-		this.userService=userService;
+		this.userService = userService;
 	}
+
 	@PostMapping("")
-	public ResponseEntity<?> insert(@Valid ProductRequestDto dto, BindingResult result,HttpServletRequest request
-			,@RequestParam(name = "img") MultipartFile img
-			) throws IllegalStateException, IOException {
+	public ResponseEntity<?> insert(@Valid ProductRequestDto dto, BindingResult result, HttpServletRequest request,
+			@RequestParam(name = "img") MultipartFile img) throws IllegalStateException, IOException {
 		if (result.hasErrors()) {
-			HashMap<String, Object> map = GetMap.getData("error", result.getAllErrors());
+			List<ObjectError> list = result.getAllErrors();
+			HashMap<String, Object> map = GetMap.getData("error", list);
 			return ResponseEntity.ok(map);
 		} else {
 			try {
-				String email =request.getUserPrincipal().getName();
-				User u=(User) userService.getByEmail(email);
+				String email = request.getUserPrincipal().getName();
+				User u = (User) userService.getByEmail(email);
 				Product p = dto.dtoToEntity();
 				p.setUser(u);
-				if(!img.isEmpty()) {
-					String fileName=img.getOriginalFilename();
-					File file=new File(app.getRealPath("/imgUpload/"+fileName));
+				if (!img.isEmpty()) {
+					String fileName = new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date());
+					File file = new File(
+							new File("src\\main\\resources\\static\\imgUpload").getAbsolutePath() + "/" + fileName);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
 					img.transferTo(file);
 					p.setImage(fileName);
+				} else {
+					return null;
 				}
 				p = service.save(p);
-				System.out.println(p);
 				HashMap<String, Object> map = GetMap.getData("ok", "Thêm thành công");
 				return ResponseEntity.ok(map);
 			} catch (Exception e) {
@@ -73,17 +90,37 @@ public class AdminProductApi {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid ProductRequestDto dto, BindingResult result,
-			@PathVariable(name = "id") Integer id) {
+			@PathVariable(name = "id") Integer id,@RequestParam(name = "img") MultipartFile img) {
 		if (result.hasErrors()) {
 			HashMap<String, Object> map = GetMap.getData("error", result.getAllErrors());
 			return ResponseEntity.ok(map);
 		} else {
 			try {
-				Product p = dto.dtoToEntity();
-				p.setId(id);
+				Product p = service.getById(id);
+				p.setAmount(Integer.parseInt(dto.getAmount()));
+				p.setBladeLength(Integer.parseInt(dto.getBladeLength()));
+				p.setBladeWide(Integer.parseInt(dto.getBladeWide()));
+				p.setLastChangedDate(new Date());
+				p.setDescription(dto.getDescription());
+				p.setHiltLength(Integer.parseInt(dto.getHiltLength()));
+				p.setMaterial(dto.getMaterial());
+				p.setName(dto.getName());
+				p.setOrigin(dto.getOrigin());
+				p.setPrice(new BigDecimal(dto.getPrice()));
+				p.setStatus(0);
+				p.setWeight(Integer.parseInt(dto.getWeight()));
+				if (!img.isEmpty()) {
+					String fileName = new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date());
+					File file = new File(
+							new File("src\\main\\resources\\static\\imgUpload").getAbsolutePath() + "/" + fileName);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					img.transferTo(file);
+					p.setImage(fileName);
+				} 
 				p = service.save(p);
-				Page<Product> page = service.getAll(0);
-				HashMap<String, Object> map = GetMap.getData("ok", page);
+				HashMap<String, Object> map = GetMap.getData("ok", "Sửa thành công");
 				return ResponseEntity.ok(map);
 			} catch (Exception e) {
 				HashMap<String, Object> map = GetMap.getData("error", "Lỗi dữ liệu");
@@ -105,18 +142,17 @@ public class AdminProductApi {
 			return ResponseEntity.ok(map);
 		}
 	}
+	
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getProduct(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
-		Product p = service.getById(id);
+	@GetMapping("/detail")
+	public ResponseEntity<?> getProductById(HttpServletRequest request,@RequestParam("id") Integer id){
 		String email =request.getUserPrincipal().getName();
 		User u=(User) userService.getByEmail(email);
-		if (p.getUser().equals(u)) {
-			HashMap<String, Object> map = GetMap.getData("ok", p);
-			return ResponseEntity.ok(map);
-		} else {
-			HashMap<String, Object> map = GetMap.getData("error", "Bạn không có quyền sửa");
-			return ResponseEntity.ok(map);
+		Product p=service.getById(id);
+		if(p.getUser().equals(u)) {
+			return ResponseEntity.ok(true);
+		}else {
+			return ResponseEntity.ok(false);
 		}
 	}
 }

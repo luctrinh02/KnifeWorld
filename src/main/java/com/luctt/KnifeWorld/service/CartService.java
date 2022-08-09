@@ -19,8 +19,7 @@ public class CartService {
 	public CartService(ICartRepository repository) {
 		this.repository = repository;
 	}
-	public List<Cart> getAll(HttpServletRequest request){
-		User u=(User) request.getSession().getAttribute("user");
+	public List<Cart> getAll(User u){
 		return repository.findByUser(u);
 	}
 	public Cart save(Cart cart){

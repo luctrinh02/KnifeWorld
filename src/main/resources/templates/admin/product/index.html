@@ -60,6 +60,22 @@
                 },
             });
         }
+        function update(id){
+            $.ajax({
+                url: "/api/admin/products/detail?id="+id,
+                type: "GET",
+                success: function (response) {
+                    if(response==false){
+                        Toast.fire({
+							icon: 'error',
+							title: "Bạn không có quyền sửa sản phẩm này"
+						});
+                    }else{
+                         window.location.href = "/admin/products/"+id;
+                    }
+                },
+            });
+        }
     </script>
 </body>
 

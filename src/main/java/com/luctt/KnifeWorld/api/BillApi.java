@@ -2,6 +2,7 @@ package com.luctt.KnifeWorld.api;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +81,12 @@ public class BillApi {
 		}
 	}
 	@PostMapping("")
-	public ResponseEntity<?> add(List<Integer> productId,List<Integer> amount,HttpServletRequest request){
+	public ResponseEntity<?> add(@RequestParam(name = "chk[]",required = false) Integer[] chk
+			,@RequestParam(name = "amount[]",required = false,defaultValue = "0") Integer[] amountArr,HttpServletRequest request){
 		String email =request.getUserPrincipal().getName();
 		User u=(User) userService.getByEmail(email);
+		List<Integer> productId=Arrays.asList(chk);
+		List<Integer> amount=Arrays.asList(amountArr);
 		Bill bill=new Bill();
 		bill.setCreatedDate(new Date());
 		bill.setStatus(0);
@@ -107,23 +111,33 @@ public class BillApi {
 			p.setAmount(p.getAmount()-amount.get(i));
 			productService.save(p);
 			billDetailService.save(detail);
+			cartPKs.add(cartPK);
 		}
-		cartService.removes(cartPKs);;
+		cartService.removes(cartPKs);
 		HashMap<String, Object> map=GetMap.getData("ok", "Đặt hàng thành công");
 		return ResponseEntity.ok(map);
 	}
 	@GetMapping("/check")
-	public ResponseEntity<?> check(List<Integer> productId,List<Integer> amount){
+	public ResponseEntity<?> check(@RequestParam(name = "chk[]",required = false) Integer[] chk
+			,@RequestParam(name = "amount[]",required = false,defaultValue = "0") Integer[] amountArr){
+		List<Integer> productId=Arrays.asList(chk);
+		List<Integer> amount=Arrays.asList(amountArr);
 		total=new BigDecimal(0);
 		List<Product> list=productService.getByIds(productId);
 		HashMap<String, Object> map;
+		for(Integer x:amount) {
+			if(x<=0) {
+				map=GetMap.getData("error", "Số lượng sản phẩm phải lớn hơn 0");
+				return ResponseEntity.ok(map);
+			}
+		}
 		for(int i=0;i<productId.size();i++) {
 			Product p=list.get(i);
 			if(amount.get(i)>p.getAmount()) {
 				map=GetMap.getData("error", "Sản phẩm id:"+p.getId()+"-"+p.getName()+" chỉ còn "+p.getAmount());
 				return ResponseEntity.ok(map);
 			}else {
-				BigDecimal amountBigDecimal=new BigDecimal(p.getAmount());
+				BigDecimal amountBigDecimal=new BigDecimal(amount.get(i));
 				total=total.add(amountBigDecimal.multiply(p.getPrice()));
 			}
 		}

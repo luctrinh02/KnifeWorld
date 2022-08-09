@@ -6,10 +6,12 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,26 +22,26 @@ import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.entities.User;
 import com.luctt.KnifeWorld.service.CartService;
 import com.luctt.KnifeWorld.service.ProductService;
+import com.luctt.KnifeWorld.service.UserService;
 import com.luctt.KnifeWorld.utilities.GetMap;
 
 @RestController
 @RequestMapping("/api/cart")
 public class CartApi {
+	@Autowired
+	private UserService userService;
 	private ProductService productService;
 	private CartService cartService;
 	public CartApi(ProductService productService, CartService cartService) {
 		this.productService = productService;
 		this.cartService = cartService;
 	}
-	@GetMapping("")
-	public ResponseEntity<?> getAll(HttpServletRequest request){
-		HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(request));
-		return ResponseEntity.ok(map);
-	}
-	@GetMapping("/{id}")
+
+	@PostMapping("/{id}")
 	public ResponseEntity<?> addToCart(@PathVariable(name = "id") Integer id,HttpServletRequest request,@RequestParam(name = "amount") Integer amount){
 		Product p=productService.getById(id);
-		User u=(User)request.getSession().getAttribute("user");
+		String email = request.getUserPrincipal().getName();
+		User u = (User) userService.getByEmail(email);
 		if(amount>p.getAmount()) {
 			HashMap<String, Object> map=GetMap.getData("error", "Số lượng tối đa chỉ còn "+p.getAmount());
 			return ResponseEntity.ok(map);
@@ -56,7 +58,7 @@ public class CartApi {
 				}else {
 					c.setAmount(c.getAmount()+amount);
 					cartService.save(c);
-					HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(request));
+					HashMap<String, Object> map=GetMap.getData("ok", "Sản phẩm đã được thêm");
 					return ResponseEntity.ok(map);
 				}
 			}else {
@@ -66,7 +68,7 @@ public class CartApi {
 				c.setProduct(p);
 				c.setUser(u);
 				cartService.save(c);
-				HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(request));
+				HashMap<String, Object> map=GetMap.getData("ok", "Sản phẩm đã được thêm");
 				return ResponseEntity.ok(map);
 			}
 		}
@@ -75,7 +77,7 @@ public class CartApi {
 	public ResponseEntity<?> delete(List<CartPK> ids,HttpServletRequest request){
 		try {
 			cartService.removes(ids);
-			HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(request));
+			HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(new User()));
 			return ResponseEntity.ok(map);
 		} catch (Exception e) {
 			HashMap<String, Object> map=GetMap.getData("ok", "Hệ thống bận. Vui lòng thử lại sau");

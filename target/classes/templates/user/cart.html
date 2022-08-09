@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="content" th:insert="~{user/cartView :: cartIndex}">
+
+    </div>
+    <script>
+        function selectAll() {
+            var chkAll = document.getElementById("chkAll");
+            var chk = document.getElementsByName("chk");
+            if (chkAll.checked == true) {
+                for (var i = 0; i < chk.length; i++) {
+                    chk[i].checked = true;
+                }
+            } else {
+                for (var i = 0; i < chk.length; i++) {
+                    chk[i].checked = false;
+                }
+            }
+        }
+        function check() {
+            var chkArray = [];
+            var amountArray = [];
+            var chkInput = document.getElementsByName("chk");
+            var amountInput = document.getElementsByName("amount");
+            var mess = document.getElementById("mess");
+            var check = 0;
+            for (let i = 0; i < chkInput.length; i++) {
+                if (chkInput[i].checked == true) {
+                    chkArray.push(chkInput[i].value);
+                    amountArray.push(amountInput[i].value);
+                    if (isNaN(amountInput[i].value)) {
+                        check++;
+                    }
+                }
+            }
+            if (chkArray.length == 0) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Vui lòng chọn sản phẩm'
+                });
+            } else {
+                if (check > 0) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Số lượng là số'
+                    });
+                } else {
+                    $.ajax({
+                        url: "/bills/check",
+                        type: "get",
+                        data: {
+                            'chk': chkArray,
+                            'amount': amountArray
+                        },
+                        datatype: 'json',
+                        success: function (response) {
+                            if (response.statusCode == "error") {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: response.data
+                                });
+                            } else {
+                                mess.innerText = response.data;
+                                $("#totalModal").modal('show');
+                            }
+                        },
+                        error: function (xhr) {
+                        }
+                    });
+                }
+            }
+        }
+        function order() {
+            var chkArray = [];
+            var amountArray = [];
+            var chkInput = document.getElementsByName("chk");
+            var amountInput = document.getElementsByName("amount");
+            var mess = document.getElementById("mess");
+            for (let i = 0; i < chkInput.length; i++) {
+                if (chkInput[i].checked == true) {
+                    chkArray.push(chkInput[i].value);
+                    amountArray.push(amountInput[i].value);
+                }
+            }
+            $.ajax({
+                url: "/bills",
+                type: "POST",
+                data: {
+                    'chk': chkArray,
+                    'amount': amountArray
+                },
+                datatype: 'json',
+                success: function (response) {
+                    $("#totalModal").modal('hide');
+                    if (response.statusCode == "ok") {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.data
+                        });
+                        sleep(1000).then(() => {
+							window.location.href = "/cart";
+						});
+                    }
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

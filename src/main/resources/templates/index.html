@@ -39,8 +39,8 @@
                     <span class="text-uppercase fw-lighter ms-2">ph17307</span>
                 </a>
                 <div class="order-lg-2">
-                    <button onclick="" class="btn position-relative"> <i class="fa fa-shopping-cart"></i>
-                    </button>
+                    <a sec:authorize="hasRole('1')" href="/cart" class="btn position-relative"> <i class="fa fa-shopping-cart"></i>
+                    </a>
                     <button type="button" class="btn position-relative">
                         <i class="fa fa-search"></i>
                     </button>

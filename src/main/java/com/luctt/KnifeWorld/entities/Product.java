@@ -65,7 +65,7 @@ public class Product implements Serializable{
 	private String origin;
 	
 	@ManyToOne
-	@JoinColumn(name = "created_by",insertable = false,updatable = false)
+	@JoinColumn(name = "created_by")
 	private User user;
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")

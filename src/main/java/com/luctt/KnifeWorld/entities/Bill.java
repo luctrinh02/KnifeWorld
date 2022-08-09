@@ -36,7 +36,7 @@ public class Bill implements Serializable{
 	@Column(name = "created_date")
 	private Date createdDate;
 	@ManyToOne
-	@JoinColumn(name = "user_id",insertable = false,updatable = false)
+	@JoinColumn(name = "user_id")
 	private User user;
 	private Integer status;
 	@JsonIgnore

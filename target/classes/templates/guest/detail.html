@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="row mt-3">
+        <div class="col-5">
+            <img th:src="@{/imgUpload/{img}(img=${product.image })}" alt="" class="w-100">
+        </div>
+        <div class="col-7">
+            <p class="fw-bold fs-3">
+                [[${product.name }]]
+            </p>
+            <p> <span class="text-danger fw-bold fs-3">
+                    [[${#numbers.formatDecimal(product.price, 1, 'DEFAULT', 0, 'DEFAULT')}]]
+                    VNĐ
+                </span>
+            </p>
+            <div class="row">
+                <div class="col-4"><span class="fw-bold">Độ dài lưỡi:</span> [[${product.bladeLength}]] mm</div>
+                <div class="col-4"><span class="fw-bold">Độ dài cán:</span> [[${product.bladeLength}]] mm</div>
+                <div class="col-4"><span class="fw-bold">Độ dày:</span> [[${product.bladeLength}]] mm</div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <span class="fw-bold">Xuất xứ:</span> [[${product.origin}]]
+                </div>
+                <div class="col-4">
+                    <span class="fw-bold">Chất liệu:</span> [[${product.material}]]
+                </div>
+                <div class="col-4"><span class="fw-bold">Khối lượng:</span> [[${product.bladeLength}]] g</div>
+            </div>
+            <label for="">Mô tả</label>
+            <textarea class="form-control" rows="5" disabled>[[${product.description }]]</textarea>
+            <div>
+                <div class="row mt-2">
+                    <label for="">Số lượng</label>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon1"
+                                onclick="tru()">-</button>
+                            <input type="number" class="form-control" name="amount" id="amount" value="1" min="1"
+                                th:attr="max=${product.amount }"
+                                th:onblur="validation([[${product.amount }]])" disabled>
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+                                th:onclick="cong([[${product.amount }]])">+</button>
+                        </div>
+                    </div>
+                    <div class="col-4 text-muted fs-6 align-middle">[[${product.amount }]]
+                        sản phẩm có sẵn</div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" th:onclick="addToCart([[${product.id}]])">
+                    <span class="fas fa-cart-plus"></span> Thêm vào giỏ hàng
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function addToCart(id) {
+            $.ajax({
+                url: "/api/cart/" + id,
+                type: "POST",
+                data: {
+                    amount: $("#amount").val()
+                },
+                success: function (response) {
+                    if (response.statusCode == "ok") {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.data
+                        });
+                    } else if (response.statusCode == "error") {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.data
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: "Bạn cần đăng nhập với tư cách thành viên"
+                        });
+                    }
+                }
+            });
+        }
+        function cong(max) {
+            var amount = document.getElementById("amount");
+            if (amount.value < max) {
+                amount.value = Number(amount.value) + 1;
+            }
+        }
+        function tru() {
+            var amount = document.getElementById("amount");
+            if (amount.value > 1) {
+                amount.value = Number(amount.value) - 1;
+            }
+        }
+        function validation(max) {
+            let value = $("#amount").val();
+            if (value > max) {
+                $("#amount").val(max);
+            } else if (value = "") {
+                $("#amount").val(1);
+            }
+        }
+    </script>
+</body>
+
+</html>

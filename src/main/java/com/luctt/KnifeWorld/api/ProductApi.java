@@ -28,21 +28,11 @@ public class ProductApi {
 
 	@GetMapping("")
 	public String getProducts(@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
-			@RequestParam(name = "keyWord",required = false) String keyWord,Model model
+			@RequestParam(name = "name",required = false) String name,Model model
 			){
 		Page<Product> page;
-		if(keyWord==null) {
-			page=service.getActiveProduct(pageNumber);
-		}else {
-			page=service.search(keyWord,pageNumber);
-		}
+			page=service.search("%"+name+"%",pageNumber);
 		model.addAttribute("products", page);
 		return "views/home";
-	}
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getProduct(@PathVariable(name = "id") Integer id){
-		Product p=service.getById(id);
-		HashMap<String, Object> map=GetMap.getData("ok", p);
-		return ResponseEntity.ok(map);
 	}
 }

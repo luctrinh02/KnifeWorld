@@ -10,23 +10,28 @@
 
 <body>
     <form action="return false;" method="post" id="formData">
+        <div class="row d-flex justify-content-center mt-3">
+			<div class="col-4">
+				<img alt="" th:src="@{/imgUpload/{img}(img=${obj.image })}" class="w-100">
+			</div>
+		</div>
         <div>
-            <label>Tên sản phẩm</label> <input name="name" type="text" class="form-control" autocomplete="off">
+            <label>Tên sản phẩm</label> <input name="name" type="text" class="form-control" autocomplete="off" th:value="${obj.name}">
             <span class="text-danger small" id="name"></span>
         </div>
         <div class="row mt-2">
             <div class="col-4">
-                <label>Xuất xứ</label> <input name="origin" type="text" class="form-control">
+                <label>Xuất xứ</label> <input name="origin" type="text" class="form-control" th:value="${obj.origin}"/>
                 <span class="text-danger small" id="origin"></span>
             </div>
             <div class="col-4">
-                <label>Chất liệu</label> <input name="material" type="text" class="form-control" autocomplete="off">
+                <label>Chất liệu</label> <input th:value="${obj.material}" name="material" type="text" class="form-control" autocomplete="off">
                 <span class="text-danger small" id="material"></span>
             </div>
             <div class="col-4">
                 <label>Trọng lượng</label>
                 <div class="input-group">
-                    <input name="weight" type="number" class="form-control" value=0>
+                    <input name="weight" type="number" class="form-control"  th:value="${obj.weight}"/>
                     <span class="input-group-text">g</span>
                 </div>
                 <span class="text-danger small" id="weight"></span>
@@ -36,7 +41,7 @@
             <div class="col-4">
                 <label>Độ dài lưỡi</label>
                 <div class="input-group">
-                    <input name="bladeLength" type="number" class="form-control" autocomplete="off" value=0>
+                    <input name="bladeLength" type="number" class="form-control" autocomplete="off"  th:value="${obj.bladeLength}"/>
                     <span class="input-group-text">mm</span>
                 </div>
                 <span class="text-danger small" id="bladeLength"></span>
@@ -44,7 +49,7 @@
             <div class="col-4">
                 <label>Độ dài cán</label>
                 <div class="input-group">
-                    <input name="hiltLength" type="number" class="form-control" value=0>
+                    <input name="hiltLength" type="number" class="form-control"  th:value="${obj.hiltLength}"/>
                     <span class="input-group-text">mm</span>
                 </div>
                 <span class="text-danger small" id="hiltLength"></span>
@@ -52,7 +57,7 @@
             <div class="col-4">
                 <label>Độ dày</label>
                 <div class="input-group">
-                    <input name="bladeWide" type="number" class="form-control" autocomplete="off" value=0>
+                    <input name="bladeWide" type="number" class="form-control" autocomplete="off"  th:value="${obj.bladeWide}"/>
                     <span class="input-group-text">mm</span>
                 </div>
                 <span class="text-danger small" id="bladeWide"></span>
@@ -60,13 +65,13 @@
         </div>
         <div class="row mt-2">
             <div class="col-4">
-                <label>Số lượng</label> <input name="amount" type="number" class="form-control" value="0">
+                <label>Số lượng</label> <input name="amount" type="number" class="form-control" value="0" th:value="${obj.amount}">
                 <span class="text-danger small" id="amount"></span>
             </div>
             <div class="col-8">
                 <label>Đơn giá</label>
                 <div class="input-group">
-                    <input name="price" type="number" class="form-control" autocomplete="off" value="0">
+                    <input name="price" type="number" class="form-control" autocomplete="off" value="0" th:value="${#numbers.formatDecimal(obj.price, 1, 'DEFAULT', 0, 'DEFAULT')}">
                     <span class="input-group-text">vnđ</span>
                 </div>
                 <span class="text-danger small" id="price"></span>
@@ -74,16 +79,14 @@
         </div>
         <div class="mt-2">
             <label>Hình ảnh</label> <input name="img" type="file" class="form-control" accept=".jpg,.png">
-            <span class="text-danger small" id="img"></span>
         </div>
         <div class="mt-2">
             <label>Mô tả</label>
-            <textarea rows="3" name="description" placeholder="Ghi mô tả vào đây" class="form-control"></textarea>
+            <textarea rows="3" name="description" placeholder="Ghi mô tả vào đây" class="form-control" th:value="${obj.description}"></textarea>
         </div>
         <div class="mt-2">
             <button type="reset" class="btn btn-secondary">Xoá form</button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm
-                mới</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Sửa</button>
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -96,11 +99,10 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">Bạn có chắn muốn thêm sản phẩm này</div>
+                        <div class="modal-body">Bạn có chắn muốn sửa sản phẩm này</div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nghĩ lại</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                                onclick="add()">Thêm</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:onclick="update([[${obj.id}]])">Sửa</button>
                         </div>
                     </div>
                 </div>
@@ -118,22 +120,17 @@
             $("#material").text("");
             $("#amount").text("");
             $("#price").text("");
-            $("#img").text("");
         }
-        function add() {
+        function update(id) {
             hideError();
-            let data = new FormData($("#formData")[0]);
-            if($("input[name='img']").val()==""){
-                $("#img").text("Chọn ảnh cho khách nhìn nào");
-            }
+            let data=new FormData($("#formData")[0]);
             $.ajax({
-                url: "/api/admin/products",
-                type: "POST",
+                url: "/api/admin/products/"+id,
+                type: "PUT",
                 processData: false,
                 contentType: false,
                 data: data,
-                success: function (response) {
-                    console.log(response)
+                success: function (response) {console.log(response)
                     if (response.statusCode == "error") {
                         for (let i = 0; i < response.data.length; i++) {
                             var selector = document.getElementById(response.data[i].field);
@@ -142,12 +139,12 @@
                     } else if (response.statusCode == "ok") {
                         Toast.fire({
                             icon: 'success',
-                            title: "Thêm thành công"
+                            title: "Sửa thành công"
                         });
                         sleep(1000).then(() => {
                             window.location.href = "/admin/products";
                         });
-                    } else {
+                    } else{
                         Toast.fire({
                             icon: 'error',
                             title: "Sever mệt rồi"
