@@ -80,6 +80,7 @@
             }
         }
         function order() {
+            $("#loading").show();
             var chkArray = [];
             var amountArray = [];
             var chkInput = document.getElementsByName("chk");
@@ -92,7 +93,7 @@
                 }
             }
             $.ajax({
-                url: "/bills",
+                url: "/api/bills",
                 type: "POST",
                 data: {
                     'chk': chkArray,
@@ -106,14 +107,63 @@
                             icon: 'success',
                             title: response.data
                         });
-                        sleep(1000).then(() => {
-							window.location.href = "/cart";
-						});
+                        getCart();
                     }
                 },
                 error: function (xhr) {
                 }
             });
+        }
+        function getCart() {
+            $.ajax({
+                url: "/api/cart",
+                type: "GET",
+                success: function (response) {
+                    $("#loading").hide();
+                    $("#content").html(response);
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+        function deleteCart() {
+            $("#loading").show();
+            var chkArray = [];
+            var amountArray = [];
+            var chkInput = document.getElementsByName("chk");
+            var check = 0;
+            for (let i = 0; i < chkInput.length; i++) {
+                if (chkInput[i].checked == true) {
+                    chkArray.push(chkInput[i].value);
+                }
+            } {
+                $.ajax({
+                    url: "/api/cart",
+                    type: "DELETE",
+                    data: {
+                        'chk': chkArray,
+                        'amount': amountArray
+                    },
+                    datatype: 'json',
+                    success: function (response) {
+                        if (response.statusCode == "ok") {
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.data
+                            });
+                            getCart();
+                        } else {
+                            $("#loading").hide();
+                            Toast.fire({
+                                icon: 'error',
+                                title: response.data
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                    }
+                });
+            }
         }
     </script>
 </body>

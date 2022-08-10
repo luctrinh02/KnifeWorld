@@ -1,4 +1,4 @@
-<div id="content" th:fragment="cartIndex">
+<th:block th:fragment="cartIndex">
     <div th:if="${carts.size()==0}">
         <p class="alert alert-warning">Giỏ hàng trống</p>
     </div>
@@ -59,17 +59,16 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận đặt
-                            hàng</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">Bạn có chắc muốn xoá?</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Suy nghĩ lại</button>
-                        <button id="order" type="button" class="btn btn-primary" onclick="deleteCart()">Xoá</button>
+                        <button id="order" type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="deleteCart()">Xoá</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</th:block>

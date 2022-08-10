@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{index.html :: dynamic(~{::body})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="content" th:insert="~{user/historyView :: historyIndex}">
+
+    </div>
+    <script>
+        function getHistory(page){
+            $.ajax({
+                url:"/api/bills",
+                method:"GET",
+                data:{
+                    page:page
+                },
+                success:function(respose){
+                    $("#content").html(respose);
+                }
+            });
+        }
+        function cancel(id,page){
+            $.ajax({
+                url:"api/bills/"+id,
+                method:"PUT",
+                success:function(respose){
+                    getHistory();
+                    $("#content").html(respose);
+                }
+            });
+        }
+        function detail(id){
+            $.ajax({
+                url:"api/bills/"+id,
+                method:"GET",
+                success:function(respose){
+                    $("#modalDetail").html(respose);
+                    $("#detail").modal('show');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

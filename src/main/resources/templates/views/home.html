@@ -1,4 +1,4 @@
-<section class="py-5" th:fragment="homeView">
+<th:block class="py-5" th:fragment="homeView">
     <div class="container">
         <div class="title text-center">
             <a href="#" class="link-dark">
@@ -6,7 +6,7 @@
                     Dao Ánh</h2>
             </a>
         </div>
-        <div class="row gx-0 gy-3" id="content">
+        <div class="row gx-0 gy-3">
             <div class="col-md-6 col-lg-4 col-xl-3 mt-4 p-2" th:each="obj : ${products.getContent()}" id="knife">
                 <div class="">
                     <div class="img position-relative">
@@ -45,4 +45,4 @@
             <span class="fas fa-forward"></span>
         </button>
     </div>
-</section>
+</th:block>

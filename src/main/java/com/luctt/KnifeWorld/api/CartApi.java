@@ -1,5 +1,6 @@
 package com.luctt.KnifeWorld.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -74,13 +75,26 @@ public class CartApi {
 		}
 	}
 	@DeleteMapping("")
-	public ResponseEntity<?> delete(List<CartPK> ids,HttpServletRequest request){
+	public ResponseEntity<?> delete(@RequestParam(name = "chk[]",required = false) Integer[] chk,HttpServletRequest request){
 		try {
+			String email = request.getUserPrincipal().getName();
+			User u = (User) userService.getByEmail(email);
+			List<CartPK> ids=new ArrayList<>();
+			if(chk==null) {
+				HashMap<String, Object> map=GetMap.getData("error", "Chưa chọn sản phẩm nào");
+				return ResponseEntity.ok(map);
+			}
+			for(int i=0;i<chk.length;i++) {
+				CartPK pk=new CartPK();
+				pk.setProductId(chk[i]);
+				pk.setUserId(u.getId());
+				ids.add(pk);
+			}
 			cartService.removes(ids);
-			HashMap<String, Object> map=GetMap.getData("ok", cartService.getAll(new User()));
+			HashMap<String, Object> map=GetMap.getData("ok", "Xóa thành công");
 			return ResponseEntity.ok(map);
 		} catch (Exception e) {
-			HashMap<String, Object> map=GetMap.getData("ok", "Hệ thống bận. Vui lòng thử lại sau");
+			HashMap<String, Object> map=GetMap.getData("error", "Hệ thống bận. Vui lòng thử lại sau");
 			return ResponseEntity.ok(map);
 		}
 	}

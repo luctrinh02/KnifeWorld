@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ import com.luctt.KnifeWorld.service.UserService;
 import com.luctt.KnifeWorld.utilities.GetMap;
 
 @RestController
-@RequestMapping("/bills")
+@RequestMapping("/api/bills")
 public class BillApi {
 	private BillService billService;
 	private CartService cartService;
@@ -48,32 +49,19 @@ public class BillApi {
 		this.productService = productService;
 		this.billDetailService = billDetailService;
 	}
-	@GetMapping("")
-	public ResponseEntity<?> getHistory(HttpServletRequest request,
-			@RequestParam(name = "page",required = true,defaultValue = "0") Integer page
-			){
-		String email =request.getUserPrincipal().getName();
-		User u=(User) userService.getByEmail(email);
-		HashMap<String, Object> map=GetMap.getData("ok", billService.getHistory(u, page));
-		return ResponseEntity.ok(map);
-	}
-	@PutMapping("")
-	public ResponseEntity<?> remove(@RequestParam(name = "id") Integer id,
-			HttpServletRequest request,
-			@RequestParam(name = "page",required = true,defaultValue = "0") Integer page
+	@PutMapping("/{id}")
+	public ResponseEntity<?> remove(@PathVariable(name = "id") Integer id
 			){
 		Bill bill=billService.getById(id);
 		if(bill.getStatus()!=1) {
 			billService.changeStatus(id, 2);
-			String email =request.getUserPrincipal().getName();
-			User u=(User) userService.getByEmail(email);
 			List<BillDetail> details=billDetailService.getByBil(bill);
 			for(BillDetail billDetail:details) {
 				Product p=billDetail.getProduct();
 				p.setAmount(p.getAmount()+billDetail.getAmount());
 				productService.save(p);
 			}
-			HashMap<String, Object> map=GetMap.getData("ok", billService.getHistory(u, page));
+			HashMap<String, Object> map=GetMap.getData("ok", "Hủy thành công");
 			return ResponseEntity.ok(map);
 		}else {
 			HashMap<String, Object> map=GetMap.getData("error", "Không thể hủy đơn do đơn đã được chấp nhận");

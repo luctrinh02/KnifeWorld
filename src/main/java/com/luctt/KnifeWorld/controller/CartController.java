@@ -30,4 +30,12 @@ public class CartController {
 		model.addAttribute("carts", carts);
 		return "user/cart";
 	}
+	@GetMapping("/api/cart")
+	public String getCart(Model model,HttpServletRequest request) {
+		String email = request.getUserPrincipal().getName();
+		User u = (User) userService.getByEmail(email);
+		List<Cart> carts=cartService.getAll(u);
+		model.addAttribute("carts", carts);
+		return "user/cartView";
+	}
 }

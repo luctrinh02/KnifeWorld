@@ -21,7 +21,7 @@
                 cả</button>
         </div>
     </div>
-    <section class="py-1" th:insert="~{/views/home :: homeView}">
+    <section id="content" class="py-1" th:insert="~{/views/home :: homeView}">
        
     </section>
     <script type="text/javascript">
@@ -32,7 +32,7 @@
                 name=$("#name").val();
             }
             $.ajax({
-                url: "/api/admin/products",
+                url: "/api/products",
                 type: "GET",
                 data: {
                     name: name,
