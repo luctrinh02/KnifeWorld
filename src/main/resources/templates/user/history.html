@@ -37,7 +37,7 @@
         }
         function detail(id){
             $.ajax({
-                url:"api/bills/"+id,
+                url:"/api/bills/"+id,
                 method:"GET",
                 success:function(respose){
                     $("#modalDetail").html(respose);

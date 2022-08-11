@@ -9,10 +9,28 @@
 </head>
 
 <body>
-    <a class="btn btn-primary mt-3 mb-3" href="/admin/users/create">Thêm
-        mới</a>
+    
     <div class="card" id="content" th:insert="~{admin/user/indexView :: userIndex}">
       
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hóa đơn chi tiết</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mt-2 mb-3" id="modalDetail">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         function getUser(page,isSearch) {
@@ -58,6 +76,31 @@
 						});
                     }
                 },
+            });
+        }
+        function history(page,id){
+            $.ajax({
+                url: "/api/admin/users/"+id+"/bills",
+                type: "GET",
+                data: {
+                    page: page
+                },
+                success: function (response) {
+                    $("#content").html(response);
+                },
+            });
+        }
+        function back(){
+            getUser(0,true);
+        }
+        function detail(id) {
+            $.ajax({
+                url: "/api/admin/bills/" + id,
+                method: "GET",
+                success: function (response) {
+                    $("#modalDetail").html(response);
+                    $("#detail").modal('show');
+                }
             });
         }
     </script>

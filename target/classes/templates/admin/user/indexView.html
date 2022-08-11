@@ -1,4 +1,6 @@
 <th:block th:fragment="userIndex">
+    <a class="btn btn-primary mt-3 mb-3" href="/admin/users/create">Thêm
+        mới</a>
     <div class="card-header">
         <div class="row d-flex justify-content-start">
             <div class="col-3">
@@ -80,8 +82,8 @@
                             </div>
                         </div> <!-- end modal -->
                     </td>
-                    <td th:if="${obj.role==1}"><a href="/admin/bills/history?id=${obj.id }" class="btn btn-primary">Lịch
-                            sử</a>
+                    <td th:if="${obj.role==1}"><button th:onclick="history(0,[[${obj.id}]])" class="btn btn-primary">Lịch
+                            sử</button>
                     </td>
                 </tr>
             </tbody>

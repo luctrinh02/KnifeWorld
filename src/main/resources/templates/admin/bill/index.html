@@ -10,10 +10,73 @@
 
 <body>
     <div class="card" id="content" th:insert="~{admin/bill/indexView :: billIndex}">
-      
+
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hóa đơn chi tiết</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mt-2 mb-3" id="modalDetail">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
-        
+        function getBill(page) {
+            $.ajax({
+                url: "/api/admin/bills",
+                type: "GET",
+                data: {
+                    page: page
+                },
+                success: function (response) {
+                    $("#content").html(response)
+                }
+            })
+        }
+        function changeStatus(id, page, status) {
+            $.ajax({
+                url: "/api/admin/bills/" + id,
+                type: "PATCH",
+                data: {
+                    status: status
+                },
+                success: function (response) {
+                    if (response.statusCode = "error") {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.data
+                        });
+                        getBill(page);
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.data
+                        });
+                    }
+                }
+            })
+        }
+        function detail(id) {
+            $.ajax({
+                url: "/api/admin/bills/" + id,
+                method: "GET",
+                success: function (response) {
+                    $("#modalDetail").html(response);
+                    $("#detail").modal('show');
+                }
+            });
+        }
     </script>
 </body>
 
