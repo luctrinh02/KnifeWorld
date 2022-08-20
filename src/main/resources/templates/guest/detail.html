@@ -56,7 +56,7 @@
                         sản phẩm có sẵn</div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-3" sec:authorize="hasRole('1')">
                 <button class="btn btn-primary" th:onclick="addToCart([[${product.id}]])">
                     <span class="fas fa-cart-plus"></span> Thêm vào giỏ hàng
                 </button>

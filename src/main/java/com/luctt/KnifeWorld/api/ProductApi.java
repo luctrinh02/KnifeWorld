@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luctt.KnifeWorld.entities.Product;
 import com.luctt.KnifeWorld.service.ProductService;
+import com.luctt.KnifeWorld.utilities.GetFullText;
 
 @Controller
 @RequestMapping("/api/products")
@@ -25,9 +26,13 @@ public class ProductApi {
 	public String getProducts(@RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
 			@RequestParam(name = "name",required = false) String name,Model model
 			){
-		Page<Product> page;
-			page=service.search("%"+name+"%",pageNumber);
-		model.addAttribute("products", page);
+		Page<Product> list;
+		if ("".equals(name)) {
+			list = service.getActiveProduct(pageNumber);
+		} else {
+			list = service.search(GetFullText.getFullText(name), pageNumber);
+		}
+		model.addAttribute("products", list);
 		return "views/home";
 	}
 }

@@ -126,6 +126,7 @@
             if($("input[name='img']").val()==""){
                 $("#img").text("Chọn ảnh cho khách nhìn nào");
             }
+            console.log(data)
             $.ajax({
                 url: "/api/admin/products",
                 type: "POST",
@@ -147,7 +148,7 @@
                         sleep(1000).then(() => {
                             window.location.href = "/admin/products";
                         });
-                    } else {
+                    } else if(response!=null){
                         Toast.fire({
                             icon: 'error',
                             title: "Sever mệt rồi"

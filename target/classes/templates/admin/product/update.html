@@ -71,7 +71,7 @@
             <div class="col-8">
                 <label>Đơn giá</label>
                 <div class="input-group">
-                    <input name="price" type="number" class="form-control" autocomplete="off" value="0" th:value="${#numbers.formatDecimal(obj.price, 1, 'DEFAULT', 0, 'DEFAULT')}">
+                    <input name="price" type="number" class="form-control" autocomplete="off" value="0" th:value="${obj.price}">
                     <span class="input-group-text">vnđ</span>
                 </div>
                 <span class="text-danger small" id="price"></span>

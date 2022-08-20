@@ -30,7 +30,7 @@
                 url:"api/bills/"+id,
                 method:"PUT",
                 success:function(respose){
-                    getHistory();
+                    getHistory(page);
                     $("#content").html(respose);
                 }
             });

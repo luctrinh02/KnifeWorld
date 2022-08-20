@@ -55,6 +55,9 @@ public class ProductService {
 	public Page<Product> adminSearch(String key,Integer pageNumber) {
 		return repository.adminSearch(key,PageRequest.of(pageNumber, AppConstraint.numOfRecord,Sort.by("id").descending()));
 	}
+	public Page<Product> adminAll(Integer pageNumber){
+		return repository.adminAll(PageRequest.of(pageNumber, AppConstraint.numOfRecord,Sort.by("id").descending()));
+	}
 	public List<Product> getByIds(List<Integer> ids){
 		return repository.findAllById(ids);
 	}

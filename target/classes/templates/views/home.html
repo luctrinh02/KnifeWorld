@@ -23,7 +23,7 @@
                             </span>
                         </div>
                         <p class="text-capitalize my-1" th:text="${obj.name}"></p>
-                        <p class="fw-bold" th:text="${obj.price}">
+                        <p class="fw-bold" th:text="${#numbers.formatDecimal(obj.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">
 
                         </p>
                     </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" th:if="${products.getTotalPages()>0}">
         <button class="btn btn-primary me-1" th:disabled="${products.getNumber()==0}" th:onclick="getProduct(0,true)">
             <span class="fas fa-backward"></span>
         </button> <button class="btn btn-primary me-1" th:disabled="${products.getNumber()==0} "
